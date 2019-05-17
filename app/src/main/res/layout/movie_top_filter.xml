@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mstb="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/MovieTop"
+                            android:layout_width="260dp"
+                            android:layout_height="223dp"
+                            android:layout_marginStart="28dp"
+                            android:layout_marginTop="8dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/movie_top_5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/searchView" />
+
+                        <TextView
+                            android:id="@+id/TopText"
+                            android:layout_width="112dp"
+                            android:layout_height="36dp"
+                            android:layout_marginStart="84dp"
+                            android:layout_marginTop="32dp"
+                            android:text="TOP 5"
+                            android:textColor="#FFF"
+                            android:textSize="24sp"
+                            android:textStyle="bold|italic"
+                            app:layout_constraintStart_toStartOf="@+id/MovieTop"
+                            app:layout_constraintTop_toTopOf="@+id/MovieTop" />
+
+                        <TextView
+                            android:id="@+id/Movie1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="30dp"
+                            android:layout_marginTop="120dp"
+                            android:text="1. Fight Club"
+                            android:textColor="#FFF"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/MovieTop" />
+
+                        <TextView
+                            android:id="@+id/Movie2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="30dp"
+                            android:layout_marginTop="4dp"
+                            android:text="2. Avenger: End Game"
+                            android:textColor="#FFF"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/Movie1" />
+
+                        <SearchView
+                            android:id="@+id/searchView"
+                            android:layout_width="395dp"
+                            android:layout_height="56dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:iconifiedByDefault="false"
+                            app:defaultQueryHint="Search Here"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:queryHint="Search" />
+
+
+                        <org.honorato.multistatetogglebutton.MultiStateToggleButton
+                            android:id="@+id/select_area"
+                            android:layout_width="373dp"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="28dp"
+                            android:layout_marginTop="24dp"
+                            mstb:layout_constraintStart_toStartOf="parent"
+                            mstb:layout_constraintTop_toBottomOf="@+id/MovieTop"
+                            mstb:mstbPrimaryColor="@color/colorBlue"
+                            mstb:mstbSecondaryColor="@color/colorWhite"
+                            mstb:values="@array/area_array" />
+
+                        <org.honorato.multistatetogglebutton.MultiStateToggleButton
+                            android:id="@+id/select_type"
+                            android:layout_width="373dp"
+                            android:layout_height="42dp"
+                            android:layout_marginStart="28dp"
+                            android:layout_marginTop="4dp"
+                            mstb:layout_constraintStart_toStartOf="parent"
+                            mstb:layout_constraintTop_toBottomOf="@+id/select_area"
+                            mstb:mstbPrimaryColor="@color/colorBlue"
+                            mstb:mstbSecondaryColor="@color/colorWhite"
+                            mstb:values="@array/type_array" />
+
+
+
+</android.support.constraint.ConstraintLayout>
+

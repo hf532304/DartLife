@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="area_array">
+        <item>All Area</item>
+        <item>China</item>
+        <item>US</item>
+        <item>Japan</item>
+        <item>France</item>
+    </string-array>
+    <string-array name="type_array">
+        <item>All Type</item>
+        <item>Romance</item>
+        <item>Drama</item>
+        <item>Thriller</item>
+        <item>Comedy</item>
+    </string-array>
+</resources>

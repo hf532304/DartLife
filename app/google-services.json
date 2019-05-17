@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "717851772066",
+    "firebase_url": "https://dartlife.firebaseio.com",
+    "project_id": "dartlife",
+    "storage_bucket": "dartlife.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:717851772066:android:f6c116a3846d4fcb",
+        "android_client_info": {
+          "package_name": "com.example.dartlife"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "717851772066-qh1792cruevkrat954flifmg77ih4p1b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1YSrvJV9qt_GUckAEozm_UuzhkXczxec"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "717851772066-qh1792cruevkrat954flifmg77ih4p1b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
