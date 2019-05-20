@@ -124,7 +124,7 @@ public class TrackService extends Service {
                 .setContentText("Tracking service started").
                         setPriority(Notification.PRIORITY_HIGH).
                         setDefaults(Notification.DEFAULT_SOUND).
-                        setSmallIcon(R.mipmap.icon).setOngoing(true);
+                        setSmallIcon(R.drawable.icon).setOngoing(true);
         builder.setVibrate(new long[0]);
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
