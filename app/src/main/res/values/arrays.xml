@@ -14,4 +14,12 @@
         <item>Thriller</item>
         <item>Comedy</item>
     </string-array>
+    <string-array name="food_type_array">
+        <item>Pizza</item>
+        <item>Burger</item>
+        <item>BBQ</item>
+        <item>Salad</item>
+        <item>Sandwich</item>
+        <item>Bakery</item>
+    </string-array>
 </resources>

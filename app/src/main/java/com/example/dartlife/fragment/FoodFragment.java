@@ -7,7 +7,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,8 +21,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.dartlife.R;
+import com.example.dartlife.activity.FoodDetailActivity;
 import com.example.dartlife.activity.FreeFoodActivity;
+import com.example.dartlife.model.Food;
 import com.example.dartlife.service.TrackService;
+import com.example.dartlife.tools.IconBorder;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -32,9 +36,22 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
+import java.util.HashMap;
 import java.util.Objects;
 
+import static android.support.constraint.Constraints.TAG;
+
+//TODO: request permission in fragment. before final
 public class FoodFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mGoogleMap;
     private MyTrackingReceiver mTrackRecv;
@@ -42,21 +59,34 @@ public class FoodFragment extends Fragment implements OnMapReadyCallback {
     private Marker mNewFoodMarker = null;
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 29;
     private boolean mFirstLocation = true;
+    private FirebaseDatabase mDB;
+    private FirebaseStorage mStorage;
+    private HashMap<String, Food> foods = new HashMap<>();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        //check permission
         checkPermission();
+
+        //register the boardcastreceiver
         mTrackRecv = new MyTrackingReceiver();
         Objects.requireNonNull(getActivity()).registerReceiver(
                 mTrackRecv,
                 new IntentFilter("tracking information"));
+
         View v = inflater.inflate(R.layout.fragment_food, container, false);
+
+        //get sync
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().
                 findFragmentById(R.id.map);
         assert mapFragment != null;
         mapFragment.getMapAsync(this);
+
+        //initialization of the firebase
+        mDB = FirebaseDatabase.getInstance();
+        mStorage = FirebaseStorage.getInstance();
+
         return v;
     }
 
@@ -69,21 +99,32 @@ public class FoodFragment extends Fragment implements OnMapReadyCallback {
         }
         //display the blue dot and add map clicklistener
         mGoogleMap.setMyLocationEnabled(true);
-        mGoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                if(marker.equals(mNewFoodMarker)){
-                    //when the user hopes to add a new free food
-                    Intent freefoodIntent = new Intent(getActivity(), FreeFoodActivity.class);
-                    startActivity(freefoodIntent);
+        mGoogleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                @Override
+                public View getInfoWindow(Marker marker) {
+                    return null;
                 }
-                return true;
-            }
+
+                @Override
+                public View getInfoContents(Marker marker) {
+                    mGoogleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                        @Override
+                        public void onInfoWindowClick(Marker marker) {
+                            if (marker.equals(mNewFoodMarker)) {
+                                Intent freeFoodIntent = new Intent(getActivity(), FreeFoodActivity.class);
+                                freeFoodIntent.putExtra("latitude", marker.getPosition().latitude);
+                                freeFoodIntent.putExtra("longitude", marker.getPosition().longitude);
+                                startActivity(freeFoodIntent);
+                            }
+                        }
+                    });
+                    return null;
+                }
         });
         mGoogleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                if(mNewFoodMarker == null) {
+                if (mNewFoodMarker == null) {
                     mNewFoodMarker = mGoogleMap.addMarker(new MarkerOptions().position(latLng)
                             .title("Create a new Free Food!")
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
@@ -92,6 +133,99 @@ public class FoodFragment extends Fragment implements OnMapReadyCallback {
                 mNewFoodMarker.showInfoWindow();
             }
         });
+
+        mGoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                Intent showFoodIntent = new Intent(getActivity(), FoodDetailActivity.class);
+                if(foods.containsKey(marker.getTitle())) {
+                    showFoodIntent.putExtra("Food", new Gson().toJson(foods.get(marker.getTitle())));
+                    startActivity(showFoodIntent);
+                }
+                else{
+                    Log.d(TAG, "onInfoWindowClick: there is no such a food");
+                }
+                return false;
+            }
+        });
+
+        //set the listeners for the food data
+        DatabaseReference databaseRef = mDB.getReference().child("Food");
+        databaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot child : dataSnapshot.getChildren()){
+                    Food curFood = child.getValue(Food.class);
+                    assert curFood != null;
+                    setMarker(curFood);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    private void setMarker(final Food curFood) {
+        final MarkerOptions curMarker = new MarkerOptions();
+        if(curFood.getFoodSource().equals("FreeFood")) {
+            Target loadPic = new Target() {
+                @Override
+                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                    Log.d("fan", "onBitmapLoaded: aaa");
+                    LatLng location = new LatLng(curFood.getLocation().getLatitude(),
+                            curFood.getLocation().getLongitude());
+                    curMarker.position(location)
+                            .icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+                    mGoogleMap.addMarker(curMarker);
+                    foods.put(curMarker.getTitle(), curFood);
+                }
+
+                @Override
+                public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+
+                }
+
+                @Override
+                public void onPrepareLoad(Drawable placeHolderDrawable) {
+                }
+            };
+            Picasso.get()
+                    .load(curFood.getImageUrl())
+                    .transform(new IconBorder(20, Color.GREEN))
+                    .into(loadPic);
+        }
+        else{
+            //it is a restaurant
+            Target loadPic = new Target() {
+                @Override
+                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                    Log.d("fan", "onBitmapLoaded: aaa");
+                    LatLng location = new LatLng(curFood.getLocation().getLatitude(),
+                            curFood.getLocation().getLongitude());
+                    curMarker.position(location)
+                            .icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+                    mGoogleMap.addMarker(curMarker);
+                    foods.put(curMarker.getTitle(), curFood);
+                }
+
+                @Override
+                public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+
+                }
+
+                @Override
+                public void onPrepareLoad(Drawable placeHolderDrawable) {
+                }
+            };
+            Picasso.get()
+                    .load(curFood.getImageUrl())
+                    .transform(new IconBorder(20, Color.GREEN))
+                    .into(loadPic);
+        }
     }
 
 
@@ -99,12 +233,15 @@ public class FoodFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Log.d("fan", "onRequestPermissionsResult: bbb");
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            if (ContextCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(Objects.requireNonNull(getActivity()),
+                    Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                Log.d("fan", "onRequestPermissionsResult: aaa");
                 startTracking();
             }
             else{
-                ActivityCompat.requestPermissions(getActivity(),
+                requestPermissions(
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_LOCATION);
             }
@@ -138,13 +275,13 @@ public class FoodFragment extends Fragment implements OnMapReadyCallback {
 
             if (ActivityCompat.shouldShowRequestPermissionRationale(Objects.requireNonNull(getActivity()),
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
-                ActivityCompat.requestPermissions(getActivity(),
+                requestPermissions(
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_LOCATION);
             } else {
 
                 // No explanation needed; request the permission
-                ActivityCompat.requestPermissions(Objects.requireNonNull(getActivity()),
+                requestPermissions(
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_LOCATION);
 
@@ -162,7 +299,11 @@ public class FoodFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onDestroy() {
         Objects.requireNonNull(getActivity()).stopService(new Intent(getActivity(), TrackService.class));
-        getActivity().unregisterReceiver(mTrackRecv);
+        try {
+            getActivity().unregisterReceiver(mTrackRecv);
+        }
+        catch (Exception ignored){
+        }
         super.onDestroy();
     }
 
