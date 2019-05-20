@@ -62,6 +62,7 @@ public class FoodFragment extends Fragment implements OnMapReadyCallback {
     private FirebaseDatabase mDB;
     private FirebaseStorage mStorage;
     private HashMap<String, Food> foods = new HashMap<>();
+    private Target loadPic = null;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -172,7 +173,7 @@ public class FoodFragment extends Fragment implements OnMapReadyCallback {
     private void setMarker(final Food curFood) {
         final MarkerOptions curMarker = new MarkerOptions();
         if(curFood.getFoodSource().equals("FreeFood")) {
-            Target loadPic = new Target() {
+            loadPic = new Target() {
                 @Override
                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                     Log.d("fan", "onBitmapLoaded: aaa");
@@ -186,21 +187,23 @@ public class FoodFragment extends Fragment implements OnMapReadyCallback {
 
                 @Override
                 public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-
+                    Log.d("fan", "onPrepareLoad");
                 }
 
                 @Override
                 public void onPrepareLoad(Drawable placeHolderDrawable) {
+                    Log.d("fan", "onPrepareLoad");
                 }
             };
             Picasso.get()
                     .load(curFood.getImageUrl())
+                    .resize(500, 500)
                     .transform(new IconBorder(20, Color.GREEN))
                     .into(loadPic);
         }
         else{
             //it is a restaurant
-            Target loadPic = new Target() {
+            loadPic = new Target() {
                 @Override
                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                     Log.d("fan", "onBitmapLoaded: aaa");
@@ -223,6 +226,7 @@ public class FoodFragment extends Fragment implements OnMapReadyCallback {
             };
             Picasso.get()
                     .load(curFood.getImageUrl())
+                    .resize(500, 500)
                     .transform(new IconBorder(20, Color.GREEN))
                     .into(loadPic);
         }
@@ -309,7 +313,6 @@ public class FoodFragment extends Fragment implements OnMapReadyCallback {
 
 
     private void getLocationCallback(Location location){
-        Log.d("fan", "getLocationCallback: 1122233");
         mCurLocation = location;
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         if(mFirstLocation) {

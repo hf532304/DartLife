@@ -61,7 +61,8 @@ import static com.example.dartlife.Const.Const.MY_PERMISSIONS_PICK_PHOTO;
 import static com.example.dartlife.Const.Const.MY_PICK_PHOTO;
 import static com.example.dartlife.Const.Const.mChoices;
 
-public class FreeFoodActivity extends AppCompatActivity {
+public class
+FreeFoodActivity extends AppCompatActivity {
 
     private TextView mFreeFoodTimeView;
     private TextView mFreeFoodDateView;

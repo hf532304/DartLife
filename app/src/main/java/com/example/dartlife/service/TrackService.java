@@ -76,7 +76,6 @@ public class TrackService extends Service {
                                 Intent intent = new Intent();
                                 intent.putExtra("longitude",location.getLongitude());
                                 intent.putExtra("latitude", location.getLatitude());
-                                Log.d("fan", "get location in service");
                                 intent.setAction("tracking information");
                                 sendBroadcast(intent);
                             }
@@ -95,7 +94,6 @@ public class TrackService extends Service {
                         intent.putExtra("longitude",location.getLongitude());
                         intent.putExtra("latitude", location.getLatitude());
                         intent.setAction("tracking information");
-                        Log.d("fan", "get location in service1");
                         sendBroadcast(intent);
                     }
                 }
