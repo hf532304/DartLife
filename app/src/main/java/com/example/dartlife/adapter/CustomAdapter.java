@@ -14,16 +14,19 @@ import android.widget.RatingBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 import org.honorato.multistatetogglebutton.MultiStateToggleButton;
+import org.honorato.multistatetogglebutton.ToggleButton;
 
 import com.example.dartlife.R;
+import com.example.dartlife.model.MovieBookEntry;
+import com.squareup.picasso.Picasso;
 
+import java.net.URL;
 import java.util.ArrayList;
 
 
 public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
 
-    //private ArrayList<MovieBookEntry> movies;
-    private ArrayList<Integer> movies;
+    private ArrayList<MovieBookEntry> movies;
     private Context mContext;
 
     private static final int TYPE_TOP_FILTER = 0;
@@ -32,9 +35,11 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public CustomAdapter(Context applicationContext) {
         mContext = applicationContext;
-        movies = new ArrayList<>();
-        movies.add(1);
-        movies.add(2);
+
+    }
+
+    public void setMovies(ArrayList<MovieBookEntry> movielist) {
+        this.movies = movielist;
     }
 
     @Override
@@ -53,10 +58,13 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         }
         if(i > 0) {
-            ((ViewHolder_Movies) viewHolder).moviePic.setImageResource(R.drawable.movie_top_5);
-            ((ViewHolder_Movies) viewHolder).movieNameYear.setText("fight club. (2000) ");
-            ((ViewHolder_Movies) viewHolder).movieScore.setText("3.5");
-            ((ViewHolder_Movies) viewHolder).movieInfo.setText("shhhh");
+            String url = movies.get(i - 1).getUrl();
+            Log.d("adapter", url);
+            Picasso.get().load(url).into( ((ViewHolder_Movies) viewHolder).moviePic);
+
+            ((ViewHolder_Movies) viewHolder).movieNameYear.setText(movies.get(i - 1).getTitle() + " (" + movies.get(i - 1).getYear() + ")");
+            ((ViewHolder_Movies) viewHolder).movieScore.setText(String.valueOf(movies.get(i - 1).getScore()));
+            ((ViewHolder_Movies) viewHolder).movieInfo.setText(movies.get(i - 1).getInfo());
         }
     }
 
@@ -116,6 +124,13 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             search_view = itemView.findViewById(R.id.searchView);
             category_first = itemView.findViewById(R.id.select_area);
             category_second = itemView.findViewById(R.id.select_type);
+
+            category_first.setOnValueChangedListener(new ToggleButton.OnValueChangedListener() {
+                @Override
+                public void onValueChanged(int position) {
+                    Log.d("heyhey", "Position: " + position);
+                }
+            });
 
 
         }

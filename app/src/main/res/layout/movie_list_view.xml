@@ -22,7 +22,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:textColor="#616264"
-            android:textSize="19sp"
+            android:textSize="12sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/MoviePic"
             app:layout_constraintTop_toTopOf="parent" />
@@ -35,8 +35,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:textColor="#616264"
-            android:textSize="19sp"
-            android:textStyle="bold"
+            android:textSize="10sp"
             app:layout_constraintStart_toEndOf="@+id/MoviePic"
             app:layout_constraintTop_toBottomOf="@+id/MovieNameYear" />
 
@@ -48,8 +47,7 @@
             android:layout_marginTop="8dp"
             android:textAlignment="gravity"
             android:textColor="#616264"
-            android:textSize="19sp"
-            android:textStyle="bold"
+            android:textSize="10sp"
             app:layout_constraintStart_toEndOf="@+id/MoviePic"
             app:layout_constraintTop_toBottomOf="@+id/MovieScore" />
 
