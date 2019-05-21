@@ -12,6 +12,7 @@
             android:layout_height="129dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:transitionName="profile"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -24,30 +25,45 @@
             android:textColor="#616264"
             android:textSize="12sp"
             android:textStyle="bold"
+            android:transitionName="nameYear"
             app:layout_constraintStart_toEndOf="@+id/MoviePic"
             app:layout_constraintTop_toTopOf="parent" />
 
 
+        <RatingBar
+            android:id="@+id/MovieFragmentScoreRating"
+            style="?android:attr/ratingBarStyleSmall"
+            android:stepSize="0.1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:numStars="5"
+            app:layout_constraintStart_toEndOf="@+id/MoviePic"
+            app:layout_constraintTop_toBottomOf="@+id/MovieNameYear" />
+
+
         <TextView
             android:id="@+id/MovieScore"
-            android:layout_width="276dp"
-            android:layout_height="26dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:textColor="#616264"
             android:textSize="10sp"
-            app:layout_constraintStart_toEndOf="@+id/MoviePic"
+            app:layout_constraintStart_toEndOf="@+id/MovieFragmentScoreRating"
             app:layout_constraintTop_toBottomOf="@+id/MovieNameYear" />
 
         <TextView
             android:id="@+id/MovieInfo"
-            android:layout_width="281dp"
-            android:layout_height="48dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:textAlignment="gravity"
             android:textColor="#616264"
             android:textSize="10sp"
+            android:transitionName="information"
             app:layout_constraintStart_toEndOf="@+id/MoviePic"
             app:layout_constraintTop_toBottomOf="@+id/MovieScore" />
 

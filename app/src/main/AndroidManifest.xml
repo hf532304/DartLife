@@ -22,6 +22,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activity.FoodDetailActivity"></activity>
+        <activity android:name=".activity.MovieInfoActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".activity.FreeFoodActivity"
             android:configChanges="keyboard|orientation|screenSize" />
