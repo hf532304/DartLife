@@ -27,6 +27,8 @@
         <activity android:name=".activity.SignupActivity"
             android:configChanges="keyboard|orientation|screenSize" />
         <activity android:name=".activity.FoodDetailActivity" />
+        <activity android:name=".activity.MovieInfoActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".activity.FreeFoodActivity"
             android:configChanges="keyboard|orientation|screenSize" />
