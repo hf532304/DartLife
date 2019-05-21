@@ -43,10 +43,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.gson.Gson;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Objects;
 
 import static android.support.constraint.Constraints.TAG;
@@ -54,7 +56,7 @@ import static android.support.constraint.Constraints.TAG;
 //TODO: request permission in fragment. before final
 public class FoodFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mGoogleMap;
-    private MyTrackingReceiver mTrackRecv;
+    private MyTrackingReceiver mTrackRecv = null;
     private Location mCurLocation = null;
     private Marker mNewFoodMarker = null;
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 29;
@@ -62,7 +64,7 @@ public class FoodFragment extends Fragment implements OnMapReadyCallback {
     private FirebaseDatabase mDB;
     private FirebaseStorage mStorage;
     private HashMap<String, Food> foods = new HashMap<>();
-    private Target loadPic = null;
+    private LinkedList<Target> mTargets = new LinkedList<>();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -173,7 +175,7 @@ public class FoodFragment extends Fragment implements OnMapReadyCallback {
     private void setMarker(final Food curFood) {
         final MarkerOptions curMarker = new MarkerOptions();
         if(curFood.getFoodSource().equals("FreeFood")) {
-            loadPic = new Target() {
+            Target tmp = new Target() {
                 @Override
                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                     Log.d("fan", "onBitmapLoaded: aaa");
@@ -183,6 +185,7 @@ public class FoodFragment extends Fragment implements OnMapReadyCallback {
                             .icon(BitmapDescriptorFactory.fromBitmap(bitmap));
                     mGoogleMap.addMarker(curMarker);
                     foods.put(curMarker.getTitle(), curFood);
+                    mTargets.remove(this);
                 }
 
                 @Override
@@ -195,15 +198,17 @@ public class FoodFragment extends Fragment implements OnMapReadyCallback {
                     Log.d("fan", "onPrepareLoad");
                 }
             };
+            mTargets.add(tmp);
             Picasso.get()
                     .load(curFood.getImageUrl())
                     .resize(500, 500)
                     .transform(new IconBorder(20, Color.GREEN))
-                    .into(loadPic);
+                    .memoryPolicy(MemoryPolicy.NO_CACHE)
+                    .into(tmp);
         }
         else{
             //it is a restaurant
-            loadPic = new Target() {
+            Target tmp = new Target() {
                 @Override
                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                     Log.d("fan", "onBitmapLoaded: aaa");
@@ -213,6 +218,7 @@ public class FoodFragment extends Fragment implements OnMapReadyCallback {
                             .icon(BitmapDescriptorFactory.fromBitmap(bitmap));
                     mGoogleMap.addMarker(curMarker);
                     foods.put(curMarker.getTitle(), curFood);
+                    mTargets.remove(this);
                 }
 
                 @Override
@@ -224,11 +230,13 @@ public class FoodFragment extends Fragment implements OnMapReadyCallback {
                 public void onPrepareLoad(Drawable placeHolderDrawable) {
                 }
             };
+            mTargets.add(tmp);
             Picasso.get()
                     .load(curFood.getImageUrl())
                     .resize(500, 500)
                     .transform(new IconBorder(20, Color.GREEN))
-                    .into(loadPic);
+                    .memoryPolicy(MemoryPolicy.NO_CACHE)
+                    .into(tmp);
         }
     }
 
@@ -311,7 +319,7 @@ public class FoodFragment extends Fragment implements OnMapReadyCallback {
         super.onDestroy();
     }
 
-
+    //update the map when get a new location from track service
     private void getLocationCallback(Location location){
         mCurLocation = location;
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
@@ -326,8 +334,6 @@ public class FoodFragment extends Fragment implements OnMapReadyCallback {
             mGoogleMap.animateCamera(cu);
         }
     }
-
-
 
 }
 

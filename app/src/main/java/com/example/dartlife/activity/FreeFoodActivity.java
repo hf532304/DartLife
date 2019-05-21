@@ -36,9 +36,7 @@ import android.widget.Toast;
 import com.example.dartlife.R;
 import com.example.dartlife.model.Food;
 import com.example.dartlife.model.MyLatLng;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -163,6 +161,8 @@ FreeFoodActivity extends AppCompatActivity {
             }
         });
 
+        mFileUri = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/mipmap/ic_launcher1");
+
     }
 
     //save the information of food in firebase storage and realtime database
@@ -192,7 +192,7 @@ FreeFoodActivity extends AppCompatActivity {
         storeImage(curFood);
     }
 
-    //to store the iimage to the firebase and then upload the rest to the realtime database
+    //to store the image to the firebase and then upload the rest to the realtime database
     private void storeImage(final Food curFood){
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Uploading Image");
@@ -332,7 +332,7 @@ FreeFoodActivity extends AppCompatActivity {
             }
             else{
                 //the user denies the request
-                Toast.makeText(getBaseContext(), "Myrun wants to use camera.",
+                Toast.makeText(getBaseContext(), "DartLife wants to use camera.",
                         Toast.LENGTH_SHORT).show();
             }
         }
@@ -343,7 +343,7 @@ FreeFoodActivity extends AppCompatActivity {
             }
             else{
                 //the user denies the request
-                Toast.makeText(getBaseContext(), "Myrun wants to access the external storage.",
+                Toast.makeText(getBaseContext(), "DartLife wants to access the external storage.",
                         Toast.LENGTH_SHORT).show();
             }
         }
@@ -396,7 +396,6 @@ FreeFoodActivity extends AppCompatActivity {
     private String getId() {
         return String.valueOf(Objects.requireNonNull(Objects.requireNonNull(
                 mAuth.getCurrentUser()).getEmail()).hashCode());
-
     }
 
 }

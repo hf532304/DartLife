@@ -90,47 +90,11 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
         }
-
     }
 
+    //jump to the register user page
     private void registerUser() {
-        String Email = Objects.requireNonNull(mInputEmail.getText()).toString();
-        String Password = Objects.requireNonNull(mInputPassword.getText()).toString();
-        if(Email.isEmpty()){
-            mInputEmail.requestFocus();
-            mInputEmail.setError("This field is required");
-        }
-        else if(!Patterns.EMAIL_ADDRESS.matcher(Email).matches()){
-            mInputEmail.requestFocus();
-            mInputEmail.setError("This email address is invalid");
-        }
-        else if(Password.isEmpty()){
-            mInputPassword.requestFocus();
-            mInputPassword.setError("This field is required");
-        }
-        else if(Password.length() < 6){
-            mInputPassword.requestFocus();
-            mInputPassword.setError("Password must be at least 6 characters");
-        }
-        else{
-            setProgress(2);
-            mAuth.createUserWithEmailAndPassword(Email, Password)
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful()){
-                                Toast.makeText(getBaseContext(), "Successfully Registered",
-                                        Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                                startActivity(intent);
-                            }
-                            else{
-                                Toast.makeText(getBaseContext(), "Authentication failed: "+
-                                        Objects.requireNonNull(task.getException()).getMessage(),
-                                        Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
-        }
+        Intent SignUpIntent = new Intent(this, SignupActivity.class);
+        startActivity(SignUpIntent);
     }
 }

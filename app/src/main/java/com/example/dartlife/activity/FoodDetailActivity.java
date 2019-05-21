@@ -80,7 +80,6 @@ public class FoodDetailActivity extends AppCompatActivity {
         String foodStr = Objects.requireNonNull(getIntent().getExtras()).getString("Food");
         Food theFood = new Gson().fromJson(foodStr, Food.class);
 
-
         //initialization of the widget
         mFoodDetailCommentView = findViewById(R.id.FoodDetailComment);
         mFoodDetailDateTimeView = findViewById(R.id.FoodDetailDateTimeView);
@@ -106,5 +105,13 @@ public class FoodDetailActivity extends AppCompatActivity {
         mFoodDetailCommentView.setText("Comment: " + theFood.getComment());
 
         //setting the dialog
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

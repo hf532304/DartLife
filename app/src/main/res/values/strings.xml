@@ -16,9 +16,15 @@
     <string name="post">POST</string>
     <string name="change">CHANGE</string>
     <string name="title">Title</string>
-    <string name="Comment">comment</string>
     <string name="comment">Comment</string>
     <string name="date">Date</string>
     <string name="time">Time</string>
     <string name="foodimage">FoodImage</string>
+    <string name="name">Name</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="phone">Phone</string>
+    <string name="major">Major</string>
+    <string name="dartmouth_class">Dartmouth Class</string>
+    <string name="email">Email</string>
 </resources>
