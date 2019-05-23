@@ -12,7 +12,7 @@ import com.example.dartlife.fragment.MovieFragment;
 import com.example.dartlife.fragment.ProfileFragment;
 
 public class NavigationAdapter extends FragmentPagerAdapter {
-    private String[] mTabNames = {"Book", "Movie", "Entertainment", "Food", "Profile"};
+    private String[] mTabNames = {"Book", "Movie", "EntertainmentActivity", "Food", "Profile"};
     public NavigationAdapter(FragmentManager FM){
         super(FM);
     }
@@ -49,4 +49,5 @@ public class NavigationAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int pos){
         return mTabNames[pos];
     }
+
 }

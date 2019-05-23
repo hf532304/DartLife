@@ -27,4 +27,13 @@
     <string name="major">Major</string>
     <string name="dartmouth_class">Dartmouth Class</string>
     <string name="email">Email</string>
+    <string name="entertainmentpic">EntertainmentPic</string>
+    <string name="add">Add</string>
+    <string name="entertainmenttype">EntertainmentType</string>
+    <string name="sports">Sports</string>
+    <string name="dramas">Dramas</string>
+    <string name="save">SAVE</string>
+    <string name="dob">DOB</string>
+    <string name="uid">UID</string>
+    <string name="drama">Drama</string>
 </resources>

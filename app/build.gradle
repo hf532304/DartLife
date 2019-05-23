@@ -39,6 +39,6 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.google.firebase:firebase-ml-vision:20.0.0'
-    implementation 'com.wrapp.floatlabelededittext:library:0.0.6'
+    implementation 'com.oguzdev:CircularFloatingActionMenu:1.0.2'
 }
 apply plugin: 'com.google.gms.google-services'

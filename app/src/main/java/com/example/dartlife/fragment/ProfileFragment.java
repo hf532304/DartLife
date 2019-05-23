@@ -1,5 +1,6 @@
 package com.example.dartlife.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
@@ -7,18 +8,21 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 
 import com.example.dartlife.R;
+import com.example.dartlife.activity.EditProfileActivity;
 import com.example.dartlife.model.Profile;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
@@ -38,10 +42,13 @@ public class ProfileFragment extends Fragment {
     private TextInputEditText mPhoneWidget = null;
     private TextInputEditText mMajorWidget = null;
     private TextInputEditText mDartmouthClassWidget = null;
+    private TextInputEditText mProfileUIDWidget = null;
+    private TextInputEditText mProfileDOBWidget = null;
     private RadioGroup mGenderWidget = null;
     private RadioButton mMaleButton = null;
     private RadioButton mFemaleButton = null;
     private ImageView mPhoto = null;
+    private Button mEditProfileButton = null;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -60,6 +67,9 @@ public class ProfileFragment extends Fragment {
         mMaleButton = cur_view.findViewById(R.id.ProfileMaleBtn);
         mFemaleButton = cur_view.findViewById(R.id.ProfileFemaleBtn);
         mPhoto = cur_view.findViewById(R.id.ProfileImageView);
+        mEditProfileButton = cur_view.findViewById(R.id.ProfileChangeBtn);
+        mProfileDOBWidget = cur_view.findViewById(R.id.ProfileDOBEditText);
+        mProfileUIDWidget = cur_view.findViewById(R.id.ProfileUIDEditText);
 
         //initialize the firebase tool
         mDB = FirebaseDatabase.getInstance();
@@ -69,9 +79,19 @@ public class ProfileFragment extends Fragment {
         mDB.getReference().child("Profile").child(getid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Profile loadProfile = dataSnapshot.getValue(Profile.class);
+                final Profile loadProfile = dataSnapshot.getValue(Profile.class);
                 assert loadProfile != null;
                 setView(loadProfile);
+
+                //enable the button to edit the profile
+                mEditProfileButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent editProfileIntent = new Intent(getActivity(), EditProfileActivity.class);
+                        editProfileIntent.putExtra("profile", new Gson().toJson(loadProfile));
+                        startActivity(editProfileIntent);
+                    }
+                });
             }
 
             @Override
@@ -79,6 +99,9 @@ public class ProfileFragment extends Fragment {
 
             }
         });
+
+        //edit profile
+
         return cur_view;
     }
 
@@ -104,6 +127,10 @@ public class ProfileFragment extends Fragment {
         mDartmouthClassWidget.setEnabled(false);
         mPhoneWidget.setText(loadProfile.getPhone());
         mPhoneWidget.setEnabled(false);
+        mProfileDOBWidget.setText(loadProfile.getDOB());
+        mProfileDOBWidget.setEnabled(false);
+        mProfileUIDWidget.setText(loadProfile.getUID());
+        mProfileUIDWidget.setEnabled(false);
         Picasso.get()
                 .load(loadProfile.getImageUrl())
                 .into(mPhoto);

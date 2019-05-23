@@ -1,14 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.EntertainmentFragment">
+    android:orientation="vertical">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:id="@+id/sporttext"
+        android:text="@string/sports"
+        android:textSize="20sp"/>
 
-</FrameLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/SportContainer"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+    </android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/dramatext"
+        android:text="@string/drama"
+        android:textSize="20sp"
+        android:layout_marginTop="80dp"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/DramaContainer"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>

@@ -138,7 +138,7 @@ public class TrackService extends Service {
                     (NotificationManager)
                             ctx.getSystemService(Context.NOTIFICATION_SERVICE);
             CharSequence channelName = "tracking service channel";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel notificationChannel;
             notificationChannel = new NotificationChannel(
                     channelId, channelName, importance);

@@ -7,6 +7,8 @@ public class Profile {
     private String Password;
     private String Phone;
     private String Major;
+    private String DOB;
+    private String UID;
     private String DartmouthClass;
     private String ImageUrl;
 
@@ -72,5 +74,21 @@ public class Profile {
 
     public void setImageUrl(String imageUrl) {
         ImageUrl = imageUrl;
+    }
+
+    public String getDOB() {
+        return DOB;
+    }
+
+    public void setDOB(String DOB) {
+        this.DOB = DOB;
+    }
+
+    public String getUID() {
+        return UID;
+    }
+
+    public void setUID(String UID) {
+        this.UID = UID;
     }
 }

@@ -88,10 +88,13 @@ public class SignupActivity extends AppCompatActivity {
     private TextInputEditText mPhoneWidget = null;
     private TextInputEditText mMajorWidget = null;
     private TextInputEditText mDartmouthClassWidget = null;
+    private TextInputEditText mDOBWidget = null;
+    private TextInputEditText mUIDWidget = null;
     private RadioGroup mGenderWidget = null;
     private RadioButton mMaleButton = null;
     private RadioButton mFemaleButton = null;
     private ImageView mPhoto = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +103,8 @@ public class SignupActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setTitle("SignUp");
         Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //initialize of the face detector
 
         //the mChange button is to change the photo of the profile
         Button mChange = findViewById(R.id.SignUpChangeBtn);
@@ -128,6 +133,8 @@ public class SignupActivity extends AppCompatActivity {
         mFemaleButton = findViewById(R.id.SignUpFemaleBtn);
         mFileUri = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/mipmap/ic_launcher1");
         mPhoto = findViewById(R.id.SignUpImageView);
+        mDOBWidget = findViewById(R.id.SignUpDOBEditText);
+        mUIDWidget = findViewById(R.id.SignUpUIDEditText);
     }
 
     //to get a new picture from the camera or the gallery
@@ -260,6 +267,10 @@ public class SignupActivity extends AppCompatActivity {
             mPasswordWidget.requestFocus();
             mPasswordWidget.setError("Password must be at least 6 characters");
         }
+        else if((mNameWidget.isEnabled() || mDOBWidget.isEnabled() ||
+                mUIDWidget.isEnabled() || mDartmouthClassWidget.isEnabled())){
+            Toast.makeText(this, "Authentication fails", Toast.LENGTH_LONG).show();
+        }
         else {
             //the logic: firstly, store the image
             //and register with firebase auth
@@ -275,6 +286,8 @@ public class SignupActivity extends AppCompatActivity {
             savingProfile.setMajor(mProfileMajor);
             savingProfile.setPhone(mProfilePhone);
             savingProfile.setPassword(mProfilePassword);
+            savingProfile.setDOB(Objects.requireNonNull(mDOBWidget.getText()).toString());
+            savingProfile.setUID(Objects.requireNonNull(mUIDWidget.getText()).toString());
 
 
             mAuth.createUserWithEmailAndPassword(mProfileEmail, mProfilePassword)
@@ -416,21 +429,62 @@ public class SignupActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             mPhoto.setImageURI(Crop.getOutput(result));
             try {
+                final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this);
+                progressDialog.setTitle("Detecting Text...");
+                progressDialog.show();
                 mImage = FirebaseVisionImage.fromFilePath(getBaseContext(), mFileUri);
                 Task<FirebaseVisionText> res =
                         mDetector.processImage(mImage)
                                 .addOnSuccessListener(new OnSuccessListener<FirebaseVisionText>() {
                                     @Override
                                     public void onSuccess(FirebaseVisionText firebaseVisionText) {
+                                        progressDialog.dismiss();
                                         Toast.makeText(getBaseContext(), "Recognition Success!",
                                                 Toast.LENGTH_LONG).show();
                                         //get the name and class of the text
                                         for(FirebaseVisionText.TextBlock block: firebaseVisionText.getTextBlocks()){
                                             for(FirebaseVisionText.Line line: block.getLines()){
-                                                if(line.getText().endsWith(",")) {
+                                                if(line.getText().trim().endsWith(",")) {
                                                     mNameWidget.setText(line.getText().replace(',', ' '));
                                                     mNameWidget.setEnabled(false);
-                                                    break;
+                                                }
+                                                else if(line.getText().startsWith("DOB")){
+                                                    String DOB = line.getText().trim();
+                                                    int i = 0;
+                                                    for(; i < DOB.length(); i++){
+                                                        if(Character.isDigit(DOB.charAt(i))){
+                                                            break;
+                                                        }
+                                                    }
+                                                    DOB = DOB.substring(i);
+                                                    mDOBWidget.setText(DOB);
+                                                    mDOBWidget.setEnabled(false);
+                                                }
+                                                else if(line.getText().startsWith("DID")){
+                                                    String DID = line.getText().trim();
+                                                    int i = 0;
+                                                    for(; i < DID.length(); i++){
+                                                        if(DID.charAt(i) == ':'){
+                                                            break;
+                                                        }
+                                                    }
+                                                    DID = DID.substring(i + 1);
+                                                    mUIDWidget.setText(DID);
+                                                    mUIDWidget.setEnabled(false);
+                                                }
+                                                else if(line.getText().toUpperCase().startsWith("ISSUE")){
+                                                    String Date = line.getText().trim();
+                                                    Log.d("fan", "onSuccess111: " + Date);
+                                                    Date = Date.substring(Date.length() - 4);
+                                                    try {
+                                                        Log.d("fan", "onSuccess: " + Date);
+                                                        Integer.parseInt(Date);
+                                                        mDartmouthClassWidget.setText(
+                                                                String.valueOf(Integer.valueOf(Date) + 4));
+                                                        mDartmouthClassWidget.setEnabled(false);
+                                                    }
+                                                    catch (NumberFormatException ignored){
+                                                    }
                                                 }
                                             }
                                         }
@@ -447,6 +501,7 @@ public class SignupActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
         } else if (resultCode == Crop.RESULT_ERROR) {
             Toast.makeText(this, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
         }
@@ -482,6 +537,11 @@ public class SignupActivity extends AppCompatActivity {
     //get user's id
     private String getId() {
         return String.valueOf(mProfileEmail.hashCode());
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
     }
 
 }

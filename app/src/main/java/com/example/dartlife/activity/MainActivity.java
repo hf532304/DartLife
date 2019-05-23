@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
         mTabLayout.setScrollPosition(0,0f,true);
         mViewPager.setCurrentItem(0);
+        mViewPager.setOffscreenPageLimit(5);
 
         mBookTab.setIcon(R.drawable.baseline_account_box_black_18dp);
         mMovieTab.setIcon(R.drawable.baseline_account_box_black_18dp);
