@@ -20,6 +20,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import org.honorato.multistatetogglebutton.MultiStateToggleButton;
@@ -27,7 +28,8 @@ import org.honorato.multistatetogglebutton.ToggleButton;
 
 import java.util.ArrayList;
 
-public class MovieFragment extends Fragment {
+public class MovieFragment extends Fragment implements
+        CustomAdapter. MyCallBack {
 
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
@@ -42,6 +44,83 @@ public class MovieFragment extends Fragment {
     ArrayList<MovieBookEntry> movies;
     public MovieFragment() {
         // Required empty public constructor
+    }
+
+    public void listenerMethod(MultiStateToggleButton category_first){
+        filter_area = category_first;
+        Log.d("buttonhaha", "listen");
+        filter_area.setOnValueChangedListener(new ToggleButton.OnValueChangedListener() {
+                @Override
+                public void onValueChanged(int position) {
+                    Log.d("buttonhaha", "Position: " + filter_area.getTexts()[position].toString());
+                    //update the movie list
+                    DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+                    movies = new ArrayList<>();
+
+                    if(filter_area.getTexts()[position].toString().equalsIgnoreCase("ALL AREA")) {
+                        mDatabase.child("movies").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for(DataSnapshot datasnapshotfirst : dataSnapshot.getChildren()) {
+
+                                    if(datasnapshotfirst == null) return;
+                                    MovieBookEntry movie = datasnapshotfirst.getValue(MovieBookEntry.class);
+                                    movies.add(movie);
+                                }
+                                customAdapter.setMovies(movies);
+                                customAdapter.notifyDataSetChanged();
+                                //list.setAdapter(customAdapter);
+
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+
+                    Query query = reference.child("movies").orderByChild("area").equalTo(filter_area.getTexts()[position].toString());
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+
+
+                                for (DataSnapshot issue : dataSnapshot.getChildren()) {
+                                    // do something with the individual "issues"
+                                    MovieBookEntry data = issue.getValue(MovieBookEntry.class);
+                                    Log.d("buttonhaha", data.getTitle());
+                                    movies.add(data);
+
+                                }
+                                customAdapter.setMovies(movies);
+                                Log.d("buttonhaha", "movies size" + movies.size());
+
+                                customAdapter.notifyDataSetChanged();
+                                //list.setAdapter(customAdapter);
+
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Log.d("buttonhaha", "oncancelled");
+
+                        }
+                    });
+
+                    customAdapter.setMovies(movies);
+                    Log.d("buttonhaha", "movies size" + movies.size());
+
+                    customAdapter.notifyDataSetChanged();
+                    //list.setAdapter(customAdapter);
+
+                }
+            });
+
     }
 
     @Override
@@ -63,7 +142,7 @@ public class MovieFragment extends Fragment {
         list.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 
-
+/*
         mDatabase.child("movies").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -84,14 +163,17 @@ public class MovieFragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        });*/
 
 
 
-        customAdapter = new CustomAdapter(this.getActivity());
+        customAdapter = new CustomAdapter(this.getActivity(), this);
 
         customAdapter.setMovies(movies);
         list.setAdapter(customAdapter);
+
+
+
 
         return v;
 

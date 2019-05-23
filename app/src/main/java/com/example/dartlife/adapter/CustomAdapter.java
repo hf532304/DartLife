@@ -30,7 +30,6 @@ import com.squareup.picasso.Picasso;
 import java.net.URL;
 import java.util.ArrayList;
 
-import static android.support.v4.content.ContextCompat.startActivity;
 
 
 public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
@@ -49,10 +48,15 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private static final String MOVIE_REVIEWS = "reviewsKey";
     private static final String MOVIE_URL = "urlKey";
 
+    MyCallBack myCallback;
 
+    public interface MyCallBack{
+        void listenerMethod(MultiStateToggleButton category);
+    }
 
-    public CustomAdapter(Context applicationContext) {
+    public CustomAdapter(Context applicationContext, MyCallBack myCallBack) {
         mContext = applicationContext;
+        this.myCallback = myCallBack;
 
     }
 
@@ -75,16 +79,16 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
         if(i == 0) {
-
+            myCallback.listenerMethod(((ViewHolder_Top_Filter) viewHolder).category_first);
         }
         if(i > 0) {
             String url = movies.get(i - 1).getUrl();
-            Log.d("adapter", url);
+
             Picasso.get().load(url).into( ((ViewHolder_Movies) viewHolder).moviePic);
 
             ((ViewHolder_Movies) viewHolder).movieNameYear.setText(movies.get(i - 1).getTitle() + " (" + movies.get(i - 1).getYear() + ")");
             ((ViewHolder_Movies) viewHolder).movieScore.setText(String.valueOf(movies.get(i - 1).getScore()));
-            ((ViewHolder_Movies) viewHolder).movieRating.setRating((float)movies.get(i - 1).getScore());
+            ((ViewHolder_Movies) viewHolder).movieRating.setRating((float)movies.get(i - 1).getScore() / 2.0f);
             ((ViewHolder_Movies) viewHolder).movieInfo.setText(movies.get(i - 1).getInfo());
         }
     }
@@ -156,7 +160,7 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             rootView.requestFocus();
 
 
-            category_first.setOnValueChangedListener(new ToggleButton.OnValueChangedListener() {
+           /* category_first.setOnValueChangedListener(new ToggleButton.OnValueChangedListener() {
                 @Override
                 public void onValueChanged(int position) {
                     Log.d("heyhey", "Position: " + position);
@@ -164,7 +168,7 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
 
                 }
-            });
+            });*/
 
         }
     }
