@@ -108,7 +108,7 @@ public class MovieInfoActivity extends AppCompatActivity {
         mMovieYear = getIntent().getStringExtra(MOVIE_YEAR);
 
         mMovieTitleTextView.setText(mMovieTitle + " (" + mMovieYear + ")");
-        mMovieScoreRatingBar.setRating((float)mMovieScore);
+        mMovieScoreRatingBar.setRating((float)mMovieScore / 2.0f);
         mMovieInfoTextView.setText(mMovieInfo);
         mMovieScoreTextView.setText(String.valueOf(mMovieScore));
 
