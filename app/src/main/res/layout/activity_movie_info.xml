@@ -1,105 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/MovieInfoLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.MovieInfoActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/MovieInfoToolbarLayout"
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/MovieInfoToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        app:theme="@style/ToolbarTheme"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/MovieInfoToolbar"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text=""
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </android.support.v7.widget.Toolbar>
+
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="383dp"
+        android:layout_height="533dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/colorBack"
+        android:transitionName="activity"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.488"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:context=".activities.ProfileActivity">
+
+
+        <ImageView
+            android:id="@+id/MoviePoster"
+            android:layout_width="112dp"
+            android:layout_height="126dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:contentDescription="MoviePoster"
+            android:transitionName="profile"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/MovieInfoTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="TextView"
+            android:textStyle="bold"
+            android:transitionName="nameYear"
+            app:layout_constraintStart_toEndOf="@+id/MoviePoster"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <RatingBar
+            android:id="@+id/MovieInfoScoreRating"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:numStars="5"
+            android:stepSize="0.1"
+            android:transitionName="rating"
+            app:layout_constraintStart_toEndOf="@+id/MoviePoster"
+            app:layout_constraintTop_toBottomOf="@+id/MovieInfoTitle" />
+
+        <TextView
+            android:id="@+id/MovieInfoInfo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:text="TextView"
+            android:transitionName="information"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/MoviePoster"
+            app:layout_constraintTop_toBottomOf="@+id/MovieInfoScoreRating" />
+
+        <TextView
+            android:id="@+id/MovieScoreNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:text="TextView"
+            android:transitionName="score"
+            app:layout_constraintStart_toEndOf="@+id/MovieInfoScoreRating"
+            app:layout_constraintTop_toBottomOf="@+id/MovieInfoTitle" />
+
+
+        <!--<android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/MoviePoster"
+            tools:layout_editor_absoluteX="0dp">
 
-    </android.support.design.widget.AppBarLayout>
+            <com.google.android.material.tabs.TabItem
+                android:text="item1" />
 
-    <ScrollView
-        android:id="@+id/EditProfileScroll"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            <com.google.android.material.tabs.TabItem
+                android:text="item2" />
 
-        <android.support.constraint.ConstraintLayout
+            <com.google.android.material.tabs.TabItem
+                android:text="item3" />
+
+        </android.support.design.widget.TabLayout>-->
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".activities.ProfileActivity">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:minHeight="?actionBarSize"
+            app:layout_constraintTop_toBottomOf="@+id/MoviePoster"
+            app:tabBackground="@color/colorBack"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@color/colorPrimary"
+            app:tabIndicatorHeight="4dp"
+            app:tabMode="fixed"
+            tools:layout_editor_absoluteX="-16dp">
+
+        </android.support.design.widget.TabLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="378dp"
+            android:layout_height="313dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tabLayout"></android.support.v4.view.ViewPager>
 
 
-            <ImageView
-                android:id="@+id/MoviePoster"
-                android:layout_width="112dp"
-                android:layout_height="126dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="70dp"
-                android:contentDescription="MoviePoster"
-                android:transitionName="profile"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:srcCompat="@tools:sample/avatars" />
+    </android.support.constraint.ConstraintLayout>
 
-            <TextView
-                android:id="@+id/MovieInfoTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="70dp"
-                android:text="TextView"
-                android:transitionName="nameYear"
-                android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/MoviePoster"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <RatingBar
-                android:id="@+id/MovieInfoScoreRating"
-                style="?android:attr/ratingBarStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:numStars="5"
-                android:stepSize="0.1"
-                app:layout_constraintStart_toEndOf="@+id/MoviePoster"
-                app:layout_constraintTop_toBottomOf="@+id/MovieInfoTitle" />
-
-            <TextView
-                android:id="@+id/MovieInfoInfo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:text="TextView"
-                android:transitionName="information"
-                app:layout_constraintStart_toEndOf="@+id/MoviePoster"
-                app:layout_constraintTop_toBottomOf="@+id/MovieInfoScoreRating" />
-
-            <TextView
-                android:id="@+id/MovieScoreNumber"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:text="TextView"
-                app:layout_constraintStart_toEndOf="@+id/MovieInfoScoreRating"
-                app:layout_constraintTop_toBottomOf="@+id/MovieInfoTitle" />
-
-            <TextView
-                android:id="@+id/MovieDescription"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
-                android:text="TextView"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/MoviePoster" />
-
-
-        </android.support.constraint.ConstraintLayout>
-    </ScrollView>
-</android.support.design.widget.CoordinatorLayout>
+</android.support.constraint.ConstraintLayout>
