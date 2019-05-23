@@ -44,9 +44,9 @@ public class NavigationAdapter extends FragmentPagerAdapter {
         return mTabNames.length;
     }
 
-    //get the title according to the position of the page
+    /*//get the title according to the position of the page
     @Override
     public CharSequence getPageTitle(int pos){
         return mTabNames[pos];
-    }
+    }*/
 }

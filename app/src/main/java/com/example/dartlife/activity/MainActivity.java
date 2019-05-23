@@ -59,11 +59,11 @@ public class MainActivity extends AppCompatActivity {
         mTabLayout.setScrollPosition(0,0f,true);
         mViewPager.setCurrentItem(0);
 
-        mBookTab.setIcon(R.drawable.baseline_account_box_black_18dp);
-        mMovieTab.setIcon(R.drawable.baseline_account_box_black_18dp);
-        mEntertainmentTab.setIcon(R.drawable.baseline_account_box_black_18dp);
-        mFoodTab.setIcon(R.drawable.baseline_account_box_black_18dp);
-        mProfileTab.setIcon(R.drawable.baseline_account_box_black_18dp);
+        mBookTab.setIcon(R.drawable.book);
+        mMovieTab.setIcon(R.drawable.movie);
+        mEntertainmentTab.setIcon(R.drawable.entertainment);
+        mFoodTab.setIcon(R.drawable.food);
+        mProfileTab.setIcon(R.drawable.profile);
 
 
         mTabLayout.addOnTabSelectedListener(

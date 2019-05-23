@@ -3,8 +3,10 @@ package com.example.dartlife.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.Rating;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.support.v4.util.Pair;
@@ -61,7 +63,7 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
 
-        RecyclerView.ViewHolder holder = getViewHolderByViewType(viewType);
+        RecyclerView.ViewHolder holder = getViewHolderByViewType(viewType, viewGroup);
         Log.d("adapter", "onCreateViewHolder");
 
 
@@ -82,6 +84,7 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             ((ViewHolder_Movies) viewHolder).movieNameYear.setText(movies.get(i - 1).getTitle() + " (" + movies.get(i - 1).getYear() + ")");
             ((ViewHolder_Movies) viewHolder).movieScore.setText(String.valueOf(movies.get(i - 1).getScore()));
+            ((ViewHolder_Movies) viewHolder).movieRating.setRating((float)movies.get(i - 1).getScore());
             ((ViewHolder_Movies) viewHolder).movieInfo.setText(movies.get(i - 1).getInfo());
         }
     }
@@ -103,9 +106,13 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return 1 + movies.size();
     }
 
-    private RecyclerView.ViewHolder getViewHolderByViewType(int viewType) {
+    private RecyclerView.ViewHolder getViewHolderByViewType(int viewType, ViewGroup viewGroup) {
         View view_movie_top5_filter = View.inflate(mContext, R.layout.movie_top_filter, null);
-        View view_movie_list = View.inflate(mContext, R.layout.movie_list_view, null);
+        //View view_movie_list = View.inflate(mContext, R.layout.movie_list_view, null);
+
+        View view_movie_list =  LayoutInflater.from(viewGroup.getContext())
+                .inflate(R.layout.movie_list_view, viewGroup, false);
+
         RecyclerView.ViewHolder holder = null;
         switch (viewType) {
             case TYPE_TOP_FILTER:
@@ -127,6 +134,7 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         public TextView top_text;
         public TextView top1_movie;
         public TextView top2_movie;
+        View rootView;
 
         public SearchView search_view;
         public MultiStateToggleButton category_first;
@@ -142,6 +150,10 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             search_view = itemView.findViewById(R.id.searchView);
             category_first = itemView.findViewById(R.id.select_area);
             category_second = itemView.findViewById(R.id.select_type);
+
+            rootView = itemView.findViewById(R.id.rootLayout);
+
+            rootView.requestFocus();
 
 
             category_first.setOnValueChangedListener(new ToggleButton.OnValueChangedListener() {
@@ -162,6 +174,8 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         public TextView movieNameYear;
         public TextView movieScore;
         public TextView movieInfo;
+        public RatingBar movieRating;
+        public CardView movieCard;
 
 
         public ViewHolder_Movies(View itemView) {
@@ -170,6 +184,9 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             movieNameYear = itemView.findViewById(R.id.MovieNameYear);
              movieScore = itemView.findViewById(R.id.MovieScore);
              movieInfo = itemView.findViewById(R.id.MovieInfo);
+             movieRating = itemView.findViewById(R.id.MovieFragmentScoreRating);
+            movieCard = itemView.findViewById(R.id.card_view);
+
 
             itemView.setOnClickListener(this);
 
@@ -194,8 +211,13 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             Pair<View, String> p2 = Pair.create((View) movieNameYear, "nameYear");
             Pair<View, String> p3 = Pair.create((View) movieInfo, "information");
 
+            Pair<View, String> p4 = Pair.create((View) movieRating, "rating");
+            Pair<View, String> p5 = Pair.create((View) movieScore, "score");
+
+            Pair<View, String> p6 = Pair.create((View) movieCard, "activity");
+
             ActivityOptionsCompat options = ActivityOptionsCompat.
-                    makeSceneTransitionAnimation((MainActivity)mContext, p1, p2, p3);
+                    makeSceneTransitionAnimation((MainActivity)mContext, p1, p2, p3, p4, p5, p6);
 
             mContext.startActivity(intent, options.toBundle());
 
