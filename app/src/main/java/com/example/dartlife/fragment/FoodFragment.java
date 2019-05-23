@@ -179,6 +179,7 @@ public class FoodFragment extends Fragment implements OnMapReadyCallback {
                     Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 Log.d("fan", "onRequestPermissionsResult: aaa");
                 startTracking();
+                setFoodView();
             }
             else{
                 requestPermissions(
@@ -228,6 +229,7 @@ public class FoodFragment extends Fragment implements OnMapReadyCallback {
             }
         } else {
             startTracking();
+            setFoodView();
         }
     }
 
@@ -268,84 +270,84 @@ public class FoodFragment extends Fragment implements OnMapReadyCallback {
         if (isVisibleToUser){
             //check permission
             checkPermission();
-            if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(getActivity()),
-                    Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
-            //display the blue dot and add map clicklistener
-            mGoogleMap.setMyLocationEnabled(true);
-            mGoogleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-                @Override
-                public View getInfoWindow(Marker marker) {
-                    return null;
-                }
-
-                @Override
-                public View getInfoContents(Marker marker) {
-                    mGoogleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-                        @Override
-                        public void onInfoWindowClick(Marker marker) {
-                            if (marker.equals(mNewFoodMarker)) {
-                                Intent freeFoodIntent = new Intent(getActivity(), FreeFoodActivity.class);
-                                freeFoodIntent.putExtra("latitude", marker.getPosition().latitude);
-                                freeFoodIntent.putExtra("longitude", marker.getPosition().longitude);
-                                startActivity(freeFoodIntent);
-                            }
-                        }
-                    });
-                    return null;
-                }
-            });
-            mGoogleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                @Override
-                public void onMapClick(LatLng latLng) {
-                    if (mNewFoodMarker == null) {
-                        mNewFoodMarker = mGoogleMap.addMarker(new MarkerOptions().position(latLng)
-                                .title("Create a new Free Food!")
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-                    }
-                    mNewFoodMarker.setPosition(latLng);
-                    mNewFoodMarker.showInfoWindow();
-                }
-            });
-
-            mGoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                @Override
-                public boolean onMarkerClick(Marker marker) {
-                    Intent showFoodIntent = new Intent(getActivity(), FoodDetailActivity.class);
-                    if(foods.containsKey(marker.getTitle())) {
-                        Log.d("fan", "onMarkerClick: " + marker.getTitle());
-                        showFoodIntent.putExtra("Food", new Gson().toJson(foods.get(marker.getTitle())));
-                        startActivity(showFoodIntent);
-                    }
-                    else{
-                        Log.d(TAG, "onInfoWindowClick: there is no such a food");
-                    }
-                    return false;
-                }
-            });
-
-            //set the listeners for the food data
-            DatabaseReference databaseRef = mDB.getReference().child("Food");
-            databaseRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    for(DataSnapshot child : dataSnapshot.getChildren()){
-                        Food curFood = child.getValue(Food.class);
-                        assert curFood != null;
-                        setMarker(curFood);
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-
         }
     }
 
 
+    private void setFoodView(){
+        if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(getActivity()),
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        mGoogleMap.setMyLocationEnabled(true);
+        mGoogleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+            @Override
+            public View getInfoWindow(Marker marker) {
+                return null;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+                mGoogleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                    @Override
+                    public void onInfoWindowClick(Marker marker) {
+                        if (marker.equals(mNewFoodMarker)) {
+                            Intent freeFoodIntent = new Intent(getActivity(), FreeFoodActivity.class);
+                            freeFoodIntent.putExtra("latitude", marker.getPosition().latitude);
+                            freeFoodIntent.putExtra("longitude", marker.getPosition().longitude);
+                            startActivity(freeFoodIntent);
+                        }
+                    }
+                });
+                return null;
+            }
+        });
+        mGoogleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                if (mNewFoodMarker == null) {
+                    mNewFoodMarker = mGoogleMap.addMarker(new MarkerOptions().position(latLng)
+                            .title("Create a new Free Food!")
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                }
+                mNewFoodMarker.setPosition(latLng);
+                mNewFoodMarker.showInfoWindow();
+            }
+        });
+
+        mGoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                Intent showFoodIntent = new Intent(getActivity(), FoodDetailActivity.class);
+                if(foods.containsKey(marker.getTitle())) {
+                    Log.d("fan", "onMarkerClick: " + marker.getTitle());
+                    showFoodIntent.putExtra("Food", new Gson().toJson(foods.get(marker.getTitle())));
+                    startActivity(showFoodIntent);
+                }
+                else{
+                    Log.d(TAG, "onInfoWindowClick: there is no such a food");
+                }
+                return false;
+            }
+        });
+
+        //set the listeners for the food data
+        DatabaseReference databaseRef = mDB.getReference().child("Food");
+        databaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot child : dataSnapshot.getChildren()){
+                    Food curFood = child.getValue(Food.class);
+                    assert curFood != null;
+                    setMarker(curFood);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 }
 
