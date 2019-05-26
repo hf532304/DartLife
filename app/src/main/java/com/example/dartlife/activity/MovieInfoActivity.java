@@ -2,27 +2,22 @@ package com.example.dartlife.activity;
 
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.PorterDuff;
+
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
+
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
+
 import android.view.MenuItem;
-import android.view.View;
+
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -34,13 +29,8 @@ import com.example.dartlife.fragment.MovieReviewsTabFragment;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Objects;
+
 
 public class MovieInfoActivity extends AppCompatActivity {
 
