@@ -33,7 +33,6 @@ import android.widget.Toast;
 
 import com.example.dartlife.R;
 import com.example.dartlife.model.Entertainment;
-import com.example.dartlife.model.MyLatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -59,8 +58,10 @@ import static com.example.dartlife.Const.Const.mChoices;
 
 public class EntertainmentActivity extends AppCompatActivity {
 
-    private TextView mEntertainmentTimeView;
-    private TextView mEntertainmentDateView;
+    private TextView mEntertainmentStartTimeView;
+    private TextView mEntertainmentStartDateView;
+    private TextView mEntertainmentEndTimeView;
+    private TextView mEntertainmentEndDateView;
     private TextView mEntertainmentTypeView;
     private EditText mEntertainmentDes;
     private TextInputEditText mEntertainmentTitle;
@@ -78,8 +79,10 @@ public class EntertainmentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_entertainment);
 
         //initialization of the widget
-        mEntertainmentTimeView = findViewById(R.id.EntertainmentTimeView);
-        mEntertainmentDateView = findViewById(R.id.EntertainmentDateView);
+        mEntertainmentStartTimeView = findViewById(R.id.EntertainmentStartTimeView);
+        mEntertainmentStartDateView = findViewById(R.id.EntertainmentStartDateView);
+        mEntertainmentEndTimeView = findViewById(R.id.EntertainmentEndTimeView);
+        mEntertainmentEndDateView = findViewById(R.id.EntertainmentEndDateView);
         mEntertainmentTypeView = findViewById(R.id.EntertainmentTypeView);
         mEntertainmentDes = findViewById(R.id.EntertainmentCommentEditText);
         mEntertainmentTitle = findViewById(R.id.EntertainmentTitleEditText);
@@ -97,9 +100,9 @@ public class EntertainmentActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //the setting time/datepickerdialog
-        mEntertainmentDateView.setText(new SimpleDateFormat("yyyy-MM-dd",
+        mEntertainmentStartDateView.setText(new SimpleDateFormat("yyyy-MM-dd",
                 Locale.getDefault()).format(new Date()));
-        mEntertainmentDateView.setOnClickListener(new View.OnClickListener() {
+        mEntertainmentStartDateView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final Calendar mCalendar = Calendar.getInstance();
@@ -112,7 +115,7 @@ public class EntertainmentActivity extends AppCompatActivity {
                                 mCalendar.set(Calendar.DATE, dayOfMonth);
                                 String result = new SimpleDateFormat("yyyy-MM-dd",
                                         Locale.getDefault()).format(mCalendar.getTime());
-                                mEntertainmentDateView.setText(result);
+                                mEntertainmentStartDateView.setText(result);
                             }
                         },
                         mCalendar.get(Calendar.YEAR),
@@ -122,9 +125,9 @@ public class EntertainmentActivity extends AppCompatActivity {
             }
         });
 
-        mEntertainmentTimeView.setText(new SimpleDateFormat("HH:mm").
+        mEntertainmentStartTimeView.setText(new SimpleDateFormat("HH:mm").
                 format(Calendar.getInstance().getTime()));
-        mEntertainmentTimeView.setOnClickListener(new View.OnClickListener() {
+        mEntertainmentStartTimeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 TimePickerDialog mTimePicker = new TimePickerDialog(EntertainmentActivity.this ,new TimePickerDialog.OnTimeSetListener() {
@@ -132,12 +135,57 @@ public class EntertainmentActivity extends AppCompatActivity {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         String result = String.format("%02d:%02d", hourOfDay, minute);
-                        mEntertainmentTimeView.setText(result);
+                        mEntertainmentStartTimeView.setText(result);
                     }
                 }, 0, 0, true);
                 mTimePicker.show();
             }
         });
+
+
+        mEntertainmentEndDateView.setText(new SimpleDateFormat("yyyy-MM-dd",
+                Locale.getDefault()).format(new Date()));
+        mEntertainmentEndDateView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar mCalendar = Calendar.getInstance();
+                DatePickerDialog mDatePicker = new DatePickerDialog(EntertainmentActivity.this,
+                        new DatePickerDialog.OnDateSetListener(){
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                mCalendar.set(Calendar.YEAR, year);
+                                mCalendar.set(Calendar.MONTH, month);
+                                mCalendar.set(Calendar.DATE, dayOfMonth);
+                                String result = new SimpleDateFormat("yyyy-MM-dd",
+                                        Locale.getDefault()).format(mCalendar.getTime());
+                                mEntertainmentEndDateView.setText(result);
+                            }
+                        },
+                        mCalendar.get(Calendar.YEAR),
+                        mCalendar.get(Calendar.MONTH),
+                        mCalendar.get(Calendar.DAY_OF_MONTH));
+                mDatePicker.show();
+            }
+        });
+
+        mEntertainmentEndTimeView.setText(new SimpleDateFormat("HH:mm").
+                format(Calendar.getInstance().getTime()));
+        mEntertainmentEndTimeView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TimePickerDialog mTimePicker = new TimePickerDialog(EntertainmentActivity.this ,new TimePickerDialog.OnTimeSetListener() {
+                    @SuppressLint("DefaultLocale")
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        String result = String.format("%02d:%02d", hourOfDay, minute);
+                        mEntertainmentEndTimeView.setText(result);
+                    }
+                }, 0, 0, true);
+                mTimePicker.show();
+            }
+        });
+
+
 
         //setting the spinner
         String EntertainmentType = Objects.requireNonNull(getIntent().getExtras()).getString("type");
@@ -164,23 +212,26 @@ public class EntertainmentActivity extends AppCompatActivity {
         Entertainment curEntertainment = new Entertainment();
         SimpleDateFormat mFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
         Calendar cal = Calendar.getInstance();
-        String dateTime = mEntertainmentDateView.getText().toString() + mEntertainmentTimeView.getText().toString();
+        String startDateTime = mEntertainmentStartDateView.getText().toString() + " " + mEntertainmentStartTimeView.getText().toString();
         try {
-            cal.setTime(mFormat.parse(dateTime));
+            cal.setTime(mFormat.parse(startDateTime));
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        curEntertainment.setTime(cal.getTimeInMillis());
+
+        curEntertainment.setStarttime(cal.getTimeInMillis());
+
+        String endDateTime = mEntertainmentEndDateView.getText().toString() + " " +  mEntertainmentEndTimeView.getText().toString();
+        try {
+            cal.setTime(mFormat.parse(endDateTime));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        
+        curEntertainment.setEndtime(cal.getTimeInMillis());
         curEntertainment.setDescription(mEntertainmentDes.getText().toString());
         curEntertainment.setTitle(Objects.requireNonNull(mEntertainmentTitle.getText()).toString());
         curEntertainment.setActivityType(mEntertainmentTypeView.getText().toString());
-        MyLatLng location = new MyLatLng();
-        double La = Objects.requireNonNull(getIntent().getExtras()).getDouble("latitude", 0);
-        double Lo = getIntent().getExtras().getDouble("longitude", 0);
-        location.setLongitude(Lo);
-        location.setLatitude(La);
-        curEntertainment.setLocation(location);
-
         //storage the image file at first, and then upload the rest of information
         storeImage(curEntertainment);
     }

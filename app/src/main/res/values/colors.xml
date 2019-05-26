@@ -7,4 +7,6 @@
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
     <color name="colorBack">#EFF1F3</color>
+    <color name="colorFavPrimary">#CF5858</color>
+    <color name="colorFavSecondary">#CC2A2A</color>
 </resources>

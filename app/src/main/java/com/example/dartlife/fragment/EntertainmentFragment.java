@@ -1,9 +1,6 @@
 package com.example.dartlife.fragment;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -20,15 +17,11 @@ import com.example.dartlife.activity.EntertainmentActivity;
 import com.example.dartlife.activity.EntertainmentInfoActivity;
 import com.example.dartlife.adapter.EntertainmentAdapter;
 import com.example.dartlife.model.Entertainment;
-import com.example.dartlife.tools.IconBorder;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -183,6 +176,8 @@ public class EntertainmentFragment extends Fragment {
             databaseRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    mSportData.clear();
+                    mDramaData.clear();
                     for(DataSnapshot child : dataSnapshot.getChildren()){
                         Entertainment curEntertainment = child.getValue(Entertainment.class);
                         assert curEntertainment != null;

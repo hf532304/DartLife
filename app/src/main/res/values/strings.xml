@@ -18,7 +18,7 @@
     <string name="title">Title</string>
     <string name="comment">Comment</string>
     <string name="date">Date</string>
-    <string name="time">Time</string>
+    <string name="starttime">Time</string>
     <string name="foodimage">FoodImage</string>
     <string name="name">Name</string>
     <string name="male">Male</string>
@@ -36,4 +36,9 @@
     <string name="dob">DOB</string>
     <string name="uid">UID</string>
     <string name="drama">Drama</string>
+    <string name="start_date">Start Date</string>
+    <string name="start_time">Start Time</string>
+    <string name="end_time">End Time</string>
+    <string name="end_date">End Date</string>
+    <string name="description">Description</string>
 </resources>

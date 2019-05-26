@@ -66,20 +66,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
-                android:id="@+id/date1"
+                android:id="@+id/startdate1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
-                android:text="@string/date"
+                android:text="@string/start_date"
                 android:layout_alignParentTop="true"/>
             <TextView
-                android:id="@+id/EntertainmentDateView"
+                android:id="@+id/EntertainmentStartDateView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="aaa"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                android:layout_below="@id/date1"/>
+                android:layout_below="@id/startdate1"/>
         </RelativeLayout>
         <View
             android:layout_width="match_parent"
@@ -89,20 +89,66 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
-                android:id="@+id/time1"
+                android:id="@+id/starttime1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/time"
+                android:text="@string/start_time"
                 android:textSize="20sp"
                 android:layout_alignParentTop="true"/>
             <TextView
-                android:id="@+id/EntertainmentTimeView"
+                android:id="@+id/EntertainmentStartTimeView"
                 android:textStyle="bold"
                 android:textSize="15sp"
                 android:text="aaa"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/time1"/>
+                android:layout_below="@id/starttime1"/>
+        </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorBlack" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/enddate1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="@string/end_date"
+                android:layout_alignParentTop="true"/>
+            <TextView
+                android:id="@+id/EntertainmentEndDateView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="aaa"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_below="@id/enddate1"/>
+        </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorBlack" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/endtime1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/end_time"
+                android:textSize="20sp"
+                android:layout_alignParentTop="true"/>
+            <TextView
+                android:id="@+id/EntertainmentEndTimeView"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:text="aaa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/endtime1"/>
         </RelativeLayout>
         <View
             android:layout_width="match_parent"
@@ -115,14 +161,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/comment1"
-                android:text="@string/comment"
+                android:text="@string/description"
                 android:textSize="20sp"
                 android:layout_alignParentTop="true"/>
             <EditText
                 android:id="@+id/EntertainmentCommentEditText"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="120dp"
                 android:background="@drawable/comment_box"
+                android:gravity="top|left"
                 android:layout_below="@id/comment1"
                 android:inputType="textMultiLine"
                 tools:ignore="LabelFor" />

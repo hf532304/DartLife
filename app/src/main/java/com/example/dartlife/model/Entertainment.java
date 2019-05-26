@@ -4,12 +4,12 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class Entertainment {
     private String ActivityType;
-    private long Time;
+    private long Starttime;
+    private long Endtime;
     private String Title;
     private String ImageUrl;
     private String Description;
     private int Number;
-    private LatLng Location;
 
     public String getTitle() {
         return Title;
@@ -27,23 +27,12 @@ public class Entertainment {
         ImageUrl = imageUrl;
     }
 
-    public long getTime() {
-        return Time;
+    public long getStarttime() {
+        return Starttime;
     }
 
-    public void setTime(long time) {
-        Time = time;
-    }
-
-    public MyLatLng getLocation() {
-        MyLatLng myLoc = new MyLatLng();
-        myLoc.setLatitude(Location.latitude);
-        myLoc.setLongitude(Location.longitude);
-        return myLoc;
-    }
-
-    public void setLocation(MyLatLng location) {
-        Location = new LatLng(location.getLatitude(), location.getLongitude());
+    public void setStarttime(long starttime) {
+        Starttime = starttime;
     }
 
     public String getActivityType() {
@@ -68,5 +57,13 @@ public class Entertainment {
 
     public void setNumber(int number) {
         Number = number;
+    }
+
+    public long getEndtime() {
+        return Endtime;
+    }
+
+    public void setEndtime(long endtime) {
+        Endtime = endtime;
     }
 }
