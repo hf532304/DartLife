@@ -72,6 +72,7 @@
             android:layout_marginEnd="8dp"
             android:textAlignment="gravity"
             android:textColor="#616264"
+            android:textSize="10dp"
             android:transitionName="information"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/MoviePic"

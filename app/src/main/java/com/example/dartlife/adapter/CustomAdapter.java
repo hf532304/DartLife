@@ -143,7 +143,7 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         public MaterialSearchBar search_view;
         public MultiStateToggleButton category_first;
-        public MultiStateToggleButton category_second;
+        //public MultiStateToggleButton category_second;
 
         public ViewHolder_Top_Filter(View itemView) {
             super(itemView);
@@ -154,7 +154,7 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             search_view = itemView.findViewById(R.id.searchView);
             category_first = itemView.findViewById(R.id.select_area);
-            category_second = itemView.findViewById(R.id.select_type);
+            //category_second = itemView.findViewById(R.id.select_type);
 
             rootView = itemView.findViewById(R.id.rootLayout);
 

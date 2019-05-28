@@ -61,7 +61,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="100dp"
-                    android:text="1. Fight Club"
+                    android:text="1. The Biggest Little Farm"
                     android:textColor="#FFF"
                     app:layout_constraintTop_toTopOf="@+id/MovieTop"
                     mstb:layout_constraintStart_toStartOf="@+id/MovieTop" />
@@ -71,10 +71,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="4dp"
-                    android:text="2. Avenger: End Game"
+                    android:layout_marginTop="8dp"
+                    android:text="2. A Dog's Journey"
                     android:textColor="#FFF"
                     app:layout_constraintTop_toBottomOf="@+id/Movie1"
+                    mstb:layout_constraintStart_toStartOf="@+id/MovieTop" />
+
+                <TextView
+                    android:id="@+id/Movie3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="8dp"
+                    android:text="3. Godzilla, King of the Mosters!"
+                    android:textColor="#FFF"
+                    app:layout_constraintTop_toBottomOf="@+id/Movie2"
                     mstb:layout_constraintStart_toStartOf="@+id/MovieTop" />
             </android.support.constraint.ConstraintLayout>
 
@@ -99,7 +110,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="36dp"
                     android:layout_marginTop="28dp"
-                    android:text="Most Viewed"
+                    android:text="Coming Soon"
                     android:textColor="#FFF"
                     android:textSize="24sp"
                     android:textStyle="bold|italic"
@@ -110,9 +121,9 @@
                     android:id="@+id/Movie1Two"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="92dp"
-                    android:text="1. Fight Club"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="100dp"
+                    android:text="1. RocketMan"
                     android:textColor="#FFF"
                     app:layout_constraintTop_toTopOf="@+id/MovieTopTwo"
                     mstb:layout_constraintStart_toStartOf="@+id/MovieTopTwo" />
@@ -121,11 +132,22 @@
                     android:id="@+id/Movie2Two"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="24dp"
                     android:layout_marginTop="8dp"
-                    android:text="2. Avenger: End Game"
+                    android:text="2. Toy Story4"
                     android:textColor="#FFF"
                     app:layout_constraintTop_toBottomOf="@+id/Movie1Two"
+                    mstb:layout_constraintStart_toStartOf="@+id/MovieTopTwo" />
+
+                <TextView
+                    android:id="@+id/Movie3Two"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="8dp"
+                    android:text="3. Late Night"
+                    android:textColor="#FFF"
+                    app:layout_constraintTop_toBottomOf="@+id/Movie2Two"
                     mstb:layout_constraintStart_toStartOf="@+id/MovieTopTwo" />
             </android.support.constraint.ConstraintLayout>
         </LinearLayout>
@@ -173,7 +195,7 @@
         mstb:mstbPrimaryColor="@color/colorBlue"
         mstb:mstbSecondaryColor="@color/colorWhite"
         mstb:values="@array/area_array" />
-
+<!--
     <org.honorato.multistatetogglebutton.MultiStateToggleButton
         android:id="@+id/select_type"
         android:layout_width="373dp"
@@ -184,7 +206,7 @@
         mstb:layout_constraintTop_toBottomOf="@+id/select_area"
         mstb:mstbPrimaryColor="@color/colorBlue"
         mstb:mstbSecondaryColor="@color/colorWhite"
-        mstb:values="@array/type_array" />
+        mstb:values="@array/type_array" />-->
 
 
 

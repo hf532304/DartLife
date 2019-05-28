@@ -40,6 +40,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.android.volley.Request;
@@ -288,7 +289,9 @@ public class MovieFragment extends Fragment implements
     public void parseDataFromFile() {
         // Reading text file from assets folder
         Log.d("movie_json", "execute");
-        ArrayList<String> movieTitles = new ArrayList<>();
+        //ArrayList<String> movieTitles = new ArrayList<>();
+        HashMap<String, String> movie_playtime = new HashMap<>();
+        HashMap<String, String> movie_desc = new HashMap<>();
         StringBuffer sb = new StringBuffer();
         BufferedReader br = null;
         try {
@@ -332,13 +335,22 @@ public class MovieFragment extends Fragment implements
                 String playTime = jsonObj.getString("play_time");
 
                 Log.d("movie_json", title);
-                if(!movieTitles.contains(title)) {
+                if(!movie_playtime.containsKey(title)) {
 
-                    movieTitles.add(title);
-                    getMoviesFromServer(title, description, playTime);
+                    movie_playtime.put(title, playTime + "\n");
+                    movie_desc.put(title, description);
+
+                } else {
+                    movie_playtime.put(title, movie_playtime.get(title) + playTime + "\n");
                 }
 
             }
+
+            for (String title : movie_playtime.keySet()) {
+                getMoviesFromServer(title, movie_desc.get(title), movie_playtime.get(title));
+            }
+
+
 
         } catch (JSONException e) {
             e.printStackTrace();
