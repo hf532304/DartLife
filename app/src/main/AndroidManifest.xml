@@ -24,14 +24,18 @@
         android:theme="@style/AppTheme">
         <activity android:name=".activity.WelcomeActivity"
             android:theme="@style/WelcomeScreenTheme"
-            android:configChanges="keyboard|orientation|screenSize">
+            android:configChanges="keyboard|orientation|screenSize"
+            android:screenOrientation="portrait">
         </activity>
         <activity android:name=".activity.EditProfileActivity"
-            android:configChanges="keyboard|orientation|screenSize"/>
+            android:configChanges="keyboard|orientation|screenSize"
+            android:screenOrientation="portrait"/>
         <activity android:name=".activity.EntertainmentActivity"
-            android:configChanges="keyboard|orientation|screenSize"/>
+            android:configChanges="keyboard|orientation|screenSize"
+            android:screenOrientation="portrait"/>
         <activity android:name=".activity.EntertainmentInfoActivity"
-            android:configChanges="keyboard|orientation|screenSize"/>
+            android:configChanges="keyboard|orientation|screenSize"
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
@@ -39,26 +43,33 @@
 
         <activity
             android:name=".activity.SignupActivity"
-            android:configChanges="keyboard|orientation|screenSize" />
+            android:configChanges="keyboard|orientation|screenSize"
+            android:screenOrientation="portrait"/>
         <activity android:name=".activity.FoodDetailActivity"
-            android:configChanges="keyboard|orientation|screenSize"/>
+            android:configChanges="keyboard|orientation|screenSize"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.MovieInfoActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:configChanges="keyboard|orientation|screenSize"/>
+            android:configChanges="keyboard|orientation|screenSize"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.FreeFoodActivity"
-            android:configChanges="keyboard|orientation|screenSize" />
-        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
+            android:configChanges="keyboard|orientation|screenSize"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity"
+            android:screenOrientation="portrait"/>
 
         <service android:name=".service.TrackService" />
 
         <activity
             android:name=".activity.MainActivity"
             android:launchMode="singleTop"
-            android:configChanges="keyboard|orientation|screenSize"/>
+            android:configChanges="keyboard|orientation|screenSize"
+            android:screenOrientation="portrait"/>
         <activity android:name=".activity.LoginActivity"
-            android:configChanges="keyboard|orientation|screenSize">
+            android:configChanges="keyboard|orientation|screenSize"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
