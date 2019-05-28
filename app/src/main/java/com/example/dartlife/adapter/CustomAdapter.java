@@ -16,7 +16,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.RatingBar;
-import android.widget.SearchView;
+
+import com.mancj.materialsearchbar.MaterialSearchBar;
 import android.widget.TextView;
 import org.honorato.multistatetogglebutton.MultiStateToggleButton;
 import org.honorato.multistatetogglebutton.ToggleButton;
@@ -51,7 +52,7 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     MyCallBack myCallback;
 
     public interface MyCallBack{
-        void listenerMethod(MultiStateToggleButton category);
+        void listenerMethod(MultiStateToggleButton category, MaterialSearchBar search_bar);
     }
 
     public CustomAdapter(Context applicationContext, MyCallBack myCallBack) {
@@ -79,7 +80,7 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
         if(i == 0) {
-            myCallback.listenerMethod(((ViewHolder_Top_Filter) viewHolder).category_first);
+            myCallback.listenerMethod(((ViewHolder_Top_Filter) viewHolder).category_first, ((ViewHolder_Top_Filter) viewHolder).search_view);
         }
         if(i > 0) {
             String url = movies.get(i - 1).getUrl();
@@ -140,7 +141,7 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         public TextView top2_movie;
         View rootView;
 
-        public SearchView search_view;
+        public MaterialSearchBar search_view;
         public MultiStateToggleButton category_first;
         public MultiStateToggleButton category_second;
 
@@ -159,16 +160,6 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             rootView.requestFocus();
 
-
-           /* category_first.setOnValueChangedListener(new ToggleButton.OnValueChangedListener() {
-                @Override
-                public void onValueChanged(int position) {
-                    Log.d("heyhey", "Position: " + position);
-                    //update the movie list
-
-
-                }
-            });*/
 
         }
     }
@@ -202,12 +193,12 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             // jump to the movie info activity
             Intent intent = new Intent(mContext, MovieInfoActivity.class);
 
-            //intent.putExtra(MOVIE_ID, "" + movies.get(getAdapterPosition() - 1).getId());
+            intent.putExtra(MOVIE_ID, movies.get(getAdapterPosition() - 1).getId());
             intent.putExtra(MOVIE_TITLE, movies.get(getAdapterPosition() - 1).getTitle());
             intent.putExtra(MOVIE_INFO, movies.get(getAdapterPosition() - 1).getInfo());
             intent.putExtra(MOVIE_SCORE, movies.get(getAdapterPosition() - 1).getScore());
             intent.putExtra(MOVIE_DESCRIPTION, movies.get(getAdapterPosition() - 1).getDescription());
-            intent.putExtra(MOVIE_REVIEWS, movies.get(getAdapterPosition() - 1).getReviews());
+            //intent.putExtra(MOVIE_REVIEWS, movies.get(getAdapterPosition() - 1).getReviews());
             intent.putExtra(MOVIE_URL, movies.get(getAdapterPosition() - 1).getUrl());
             intent.putExtra(MOVIE_YEAR, movies.get(getAdapterPosition() - 1).getYear());
 
