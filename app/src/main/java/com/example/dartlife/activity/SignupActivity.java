@@ -295,10 +295,9 @@ public class SignupActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
-                                Toast.makeText(getBaseContext(), "Successfully Registered",
+                                Toast.makeText(getBaseContext(), "Authentication successfully: "+
+                                                Objects.requireNonNull(task.getException()).getMessage(),
                                         Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                startActivity(intent);
                             }
                             else{
                                 Toast.makeText(getBaseContext(), "Authentication failed: "+
@@ -336,6 +335,10 @@ public class SignupActivity extends AppCompatActivity {
                                         public void onSuccess(Void aVoid) {
                                             progressDialog.dismiss();
                                             //next, create the user in authentication
+                                            Toast.makeText(getBaseContext(), "Successfully Registered",
+                                                    Toast.LENGTH_LONG).show();
+                                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                            startActivity(intent);
                                             finish();
                                         }
                                     });

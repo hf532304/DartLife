@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     tools:context=".activity.EntertainmentInfoActivity">
 
     <LinearLayout
@@ -11,14 +12,22 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="300dp">
-            <ImageView
-                android:id="@+id/EntertainmentDetailImageView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:srcCompat="@mipmap/ic_launcher"
-                android:contentDescription="@string/entertainment" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <android.support.v7.widget.CardView
+                android:layout_width="200dp"
+                android:layout_height="260dp"
+                card_view:cardCornerRadius="5dp"
+                card_view:cardBackgroundColor="@color/colorBack"
+                android:layout_margin="5dp"
+                android:layout_centerHorizontal="true">
+                <ImageView
+                    android:id="@+id/EntertainmentDetailImageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@mipmap/ic_launcher"
+                    android:contentDescription="@string/entertainment" />
+            </android.support.v7.widget.CardView>
             <com.varunest.sparkbutton.SparkButton
                 android:id="@+id/spark_button"
                 android:layout_alignParentTop="true"
@@ -37,18 +46,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20sp"
+            android:textStyle="bold" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorBlack" />
+        <TextView
+            android:layout_marginTop="5dp"
+            android:id="@+id/EntertainmentDetailStartDateTimeView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
             android:textStyle="bold"/>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/colorBlack" />
         <TextView
-            android:id="@+id/EntertainmentDetailStartDateTimeView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textStyle="bold"/>
-        <TextView
+            android:layout_marginTop="5dp"
             android:id="@+id/EntertainmentDetailEndDateTimeView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -59,6 +74,7 @@
             android:layout_height="1dp"
             android:background="@color/colorBlack" />
         <TextView
+            android:layout_marginTop="5dp"
             android:id="@+id/EntertainmentDetailTypeView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -69,15 +85,12 @@
             android:layout_height="1dp"
             android:background="@color/colorBlack" />
         <TextView
+            android:layout_marginTop="5dp"
             android:id="@+id/EntertainmentDetailComment"
             android:layout_width="match_parent"
             android:layout_height="120dp"
             android:background="@drawable/comment_box"
             android:textSize="20sp"
             android:textStyle="bold"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/colorBlack" />
     </LinearLayout>
 </ScrollView>

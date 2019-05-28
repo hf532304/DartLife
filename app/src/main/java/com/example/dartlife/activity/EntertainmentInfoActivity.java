@@ -34,6 +34,7 @@ import com.google.api.services.calendar.model.EventAttendee;
 import com.google.api.services.calendar.model.EventDateTime;
 import com.google.api.services.calendar.model.EventReminder;
 import com.google.gson.Gson;
+import com.sdsmdg.tastytoast.TastyToast;
 import com.squareup.picasso.Picasso;
 import com.varunest.sparkbutton.SparkButton;
 import com.varunest.sparkbutton.SparkEventListener;
@@ -98,7 +99,7 @@ public class EntertainmentInfoActivity extends AppCompatActivity {
                     getResultsFromApi();
                 } else {
                     new removeEvent().execute();
-                    // TODO: remove the event from the google calendar
+                    TastyToast.makeText(getApplicationContext(), "Deleted from your Google Calendar", TastyToast.LENGTH_LONG, TastyToast.CONFUSING);
                 }
             }
 
@@ -121,10 +122,10 @@ public class EntertainmentInfoActivity extends AppCompatActivity {
         //the setting of views
         java.util.Calendar cal = java.util.Calendar.getInstance();
         cal.setTimeInMillis(theEntertainment.getStarttime());
-        mEntertainmentDetailStartDateTimeView.setText("Time: " + new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").
+        mEntertainmentDetailStartDateTimeView.setText("StartTime: " + new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").
                 format(cal.getTime()));
         cal.setTimeInMillis(theEntertainment.getEndtime());
-        mEntertainmentDetailEndDateTimeView.setText("Time: " + new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").
+        mEntertainmentDetailEndDateTimeView.setText("EndTime: " + new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").
                 format(cal.getTime()));
         Picasso.get()
                 .load(theEntertainment.getImageUrl())
@@ -149,6 +150,7 @@ public class EntertainmentInfoActivity extends AppCompatActivity {
             chooseAccount();
         } else {
             new MakeRequestTask(mCredential).execute();
+            TastyToast.makeText(getApplicationContext(), "Added to your Google Calendar", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
         }
     }
 
@@ -208,9 +210,6 @@ public class EntertainmentInfoActivity extends AppCompatActivity {
             return null;
         }
 
-        @Override
-        protected void onPreExecute() {
-        }
     }
 
     private class removeEvent extends AsyncTask<Void, Void, Void> {
@@ -224,7 +223,7 @@ public class EntertainmentInfoActivity extends AppCompatActivity {
                     startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
                 }
                 catch (Exception e){
-                    Log.d("fan", "addEvent: "+ e.toString());
+                    Log.d("fan", "removeEvent: "+ e.toString());
                 }
             return null;
         }
