@@ -33,6 +33,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -65,7 +67,10 @@ public class FoodFragment extends Fragment implements OnMapReadyCallback {
     private FirebaseDatabase mDB;
     private FirebaseStorage mStorage;
     private HashMap<String, Food> foods = new HashMap<>();
+    private HashMap<Food, Marker> markers = new HashMap<>();
     private LinkedList<Target> mTargets = new LinkedList<>();
+    private float mZoom = 21;
+    private Target tmp = null;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -98,20 +103,21 @@ public class FoodFragment extends Fragment implements OnMapReadyCallback {
         mGoogleMap = googleMap;
     }
 
-    private void setMarker(final Food curFood) {
+    private void setMarker(final Food curFood, int height, int width) {
         final MarkerOptions curMarker = new MarkerOptions();
         if(curFood.getFoodSource().equals("FreeFood")) {
-            Target tmp = new Target() {
+            tmp = new Target() {
                 @Override
                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                    Log.d("fan", "onBitmapLoaded: aaa");
                     LatLng location = new LatLng(curFood.getLocation().getLatitude(),
                             curFood.getLocation().getLongitude());
                     curMarker.position(location)
                             .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
                             .title(curFood.getTitle());
-                    mGoogleMap.addMarker(curMarker);
+                    Marker marker = mGoogleMap.addMarker(curMarker);
                     foods.put(curMarker.getTitle(), curFood);
+                    Log.d("fan", "onBitmapLoaded: kkk111");
+                    markers.put(curFood, marker);
                     mTargets.remove(this);
                 }
 
@@ -128,24 +134,25 @@ public class FoodFragment extends Fragment implements OnMapReadyCallback {
             mTargets.add(tmp);
             Picasso.get()
                     .load(curFood.getImageUrl())
-                    .resize(500, 500)
-                    .transform(new IconBorder(20, Color.GREEN))
+                    .resize(width, height)
+                    .transform(new IconBorder((int)Math.sqrt(width), Color.GREEN))
                     .memoryPolicy(MemoryPolicy.NO_CACHE)
                     .into(tmp);
         }
         else{
             //it is a restaurant
-            Target tmp = new Target() {
+            tmp = new Target() {
                 @Override
                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                    Log.d("fan", "onBitmapLoaded: aaa");
                     LatLng location = new LatLng(curFood.getLocation().getLatitude(),
                             curFood.getLocation().getLongitude());
                     curMarker.position(location)
                             .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
                             .title(curFood.getTitle());
-                    mGoogleMap.addMarker(curMarker);
+                    Marker marker = mGoogleMap.addMarker(curMarker);
                     foods.put(curMarker.getTitle(), curFood);
+                    Log.d("fan", "onBitmapLoaded: kkk");
+                    markers.put(curFood, marker);
                     mTargets.remove(this);
                 }
 
@@ -161,7 +168,7 @@ public class FoodFragment extends Fragment implements OnMapReadyCallback {
             mTargets.add(tmp);
             Picasso.get()
                     .load(curFood.getImageUrl())
-                    .resize(500, 500)
+                    .resize(width, height)
                     .transform(new IconBorder(20, Color.GREEN))
                     .memoryPolicy(MemoryPolicy.NO_CACHE)
                     .into(tmp);
@@ -336,10 +343,11 @@ public class FoodFragment extends Fragment implements OnMapReadyCallback {
         databaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                mGoogleMap.clear();
                 for(DataSnapshot child : dataSnapshot.getChildren()){
                     Food curFood = child.getValue(Food.class);
                     assert curFood != null;
-                    setMarker(curFood);
+                    setMarker(curFood, 400, 400);
                 }
             }
 
@@ -348,6 +356,25 @@ public class FoodFragment extends Fragment implements OnMapReadyCallback {
 
             }
         });
+
+        mGoogleMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
+            @Override
+            public void onCameraMove() {
+                CameraPosition cameraPosition = mGoogleMap.getCameraPosition();
+                float zoomLevel = cameraPosition.zoom;
+                if(Math.abs(mZoom - zoomLevel) < 1.5 || zoomLevel < 10){
+                    return;
+                }
+                mGoogleMap.clear();
+                mZoom = zoomLevel;
+                //next, resize all the picture of markers
+                for(Food f: foods.values()){
+                    setMarker(f, (int)(mZoom * (mZoom+2)), (int)((mZoom + 2) * mZoom));
+                }
+            }
+        });
     }
+
+
 }
 

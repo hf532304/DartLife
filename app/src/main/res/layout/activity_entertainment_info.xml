@@ -10,7 +10,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp">
+            <ImageView
+                android:id="@+id/EntertainmentDetailImageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:srcCompat="@mipmap/ic_launcher"
+                android:contentDescription="@string/entertainment" />
+            <com.varunest.sparkbutton.SparkButton
+                android:id="@+id/spark_button"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                app:sparkbutton_activeImage="@drawable/icon_selected"
+                app:sparkbutton_inActiveImage="@drawable/icon_unselected"
+                app:sparkbutton_primaryColor="@color/colorFavPrimary"
+                app:sparkbutton_secondaryColor="@color/colorFavSecondary"
+                android:layout_gravity="end|bottom"
+                app:sparkbutton_iconSize="40dp" />
+        </RelativeLayout>
         <TextView
             android:id="@+id/EntertainmentDetailTitleView"
             android:layout_width="match_parent"
@@ -58,28 +79,5 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/colorBlack" />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/EntertainmentDetailImageView"
-                android:layout_width="144dp"
-                android:layout_height="135dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginStart="120dp"
-                app:srcCompat="@mipmap/ic_launcher"
-                android:contentDescription="@string/entertainment" />
-            <com.varunest.sparkbutton.SparkButton
-                android:id="@+id/spark_button"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                app:sparkbutton_activeImage="@drawable/icon_selected"
-                app:sparkbutton_inActiveImage="@drawable/icon_unselected"
-                app:sparkbutton_primaryColor="@color/colorFavPrimary"
-                app:sparkbutton_secondaryColor="@color/colorFavSecondary"
-                android:layout_gravity="end|bottom"
-                app:sparkbutton_iconSize="40dp" />
-        </LinearLayout>
-
     </LinearLayout>
 </ScrollView>

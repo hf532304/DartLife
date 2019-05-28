@@ -15,10 +15,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.stephentuso.welcome.WelcomeHelper;
 
 import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
+
 
     private Button mRegisterBtn;
     private Button mLoginBtn;
@@ -26,8 +28,14 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputEditText mInputEmail;
     private TextInputEditText mInputPassword;
 
+    private WelcomeHelper welcomeScreen;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        welcomeScreen = new WelcomeHelper(this, WelcomeActivity.class);
+        welcomeScreen.show(savedInstanceState);
+        Intent welcomeIntent = new Intent(this, WelcomeActivity.class);
+        startActivity(welcomeIntent);
         super.onCreate(savedInstanceState);
         this.getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
@@ -51,7 +59,6 @@ public class LoginActivity extends AppCompatActivity {
                 loginUser();
             }
         });
-
     }
 
     private void loginUser() {
@@ -96,5 +103,11 @@ public class LoginActivity extends AppCompatActivity {
     private void registerUser() {
         Intent SignUpIntent = new Intent(this, SignupActivity.class);
         startActivity(SignUpIntent);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        welcomeScreen.onSaveInstanceState(outState);
     }
 }

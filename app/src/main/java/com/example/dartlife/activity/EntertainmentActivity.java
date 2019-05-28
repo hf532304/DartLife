@@ -2,9 +2,7 @@ package com.example.dartlife.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
-import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -31,6 +29,9 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.borax12.materialdaterangepicker.date.DatePickerDialog;
+import com.borax12.materialdaterangepicker.time.RadialPickerLayout;
+import com.borax12.materialdaterangepicker.time.TimePickerDialog;
 import com.example.dartlife.R;
 import com.example.dartlife.model.Entertainment;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -56,12 +57,10 @@ import static com.example.dartlife.Const.Const.MY_PERMISSIONS_PICK_PHOTO;
 import static com.example.dartlife.Const.Const.MY_PICK_PHOTO;
 import static com.example.dartlife.Const.Const.mChoices;
 
-public class EntertainmentActivity extends AppCompatActivity {
+public class EntertainmentActivity extends AppCompatActivity implements
+        DatePickerDialog.OnDateSetListener,TimePickerDialog.OnTimeSetListener{
 
-    private TextView mEntertainmentStartTimeView;
-    private TextView mEntertainmentStartDateView;
-    private TextView mEntertainmentEndTimeView;
-    private TextView mEntertainmentEndDateView;
+    private TextView mEntertainmentPeriodView;
     private TextView mEntertainmentTypeView;
     private EditText mEntertainmentDes;
     private TextInputEditText mEntertainmentTitle;
@@ -71,6 +70,13 @@ public class EntertainmentActivity extends AppCompatActivity {
     private StorageReference mStorageRef;
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDB;
+    private Calendar mCalendar;
+    private String mBeginDate;
+    private String mBeginTime;
+    private String mEndDate;
+    private String mEndTime;
+    private TimePickerDialog timeDialog;
+    private DatePickerDialog dateDialog;
 
     @SuppressLint("SimpleDateFormat")
     @Override
@@ -79,15 +85,31 @@ public class EntertainmentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_entertainment);
 
         //initialization of the widget
-        mEntertainmentStartTimeView = findViewById(R.id.EntertainmentStartTimeView);
-        mEntertainmentStartDateView = findViewById(R.id.EntertainmentStartDateView);
-        mEntertainmentEndTimeView = findViewById(R.id.EntertainmentEndTimeView);
-        mEntertainmentEndDateView = findViewById(R.id.EntertainmentEndDateView);
+        mEntertainmentPeriodView = findViewById(R.id.entertainmentPeriod);
         mEntertainmentTypeView = findViewById(R.id.EntertainmentTypeView);
         mEntertainmentDes = findViewById(R.id.EntertainmentCommentEditText);
         mEntertainmentTitle = findViewById(R.id.EntertainmentTitleEditText);
         mChangeBtn = findViewById(R.id.ChangeEntertainmentBtn);
         mEntertainmentImageView = findViewById(R.id.EntertainmentImageView);
+
+        //initialization of the calendar
+        mCalendar = Calendar.getInstance();
+
+
+        //initialization of the calendar picker
+        timeDialog = TimePickerDialog.newInstance(
+                EntertainmentActivity.this,
+                mCalendar.get(Calendar.HOUR_OF_DAY),
+                mCalendar.get(Calendar.MINUTE),
+                false
+        );
+
+        dateDialog = DatePickerDialog.newInstance(
+                EntertainmentActivity.this,
+                mCalendar.get(Calendar.YEAR),
+                mCalendar.get(Calendar.MONTH),
+                mCalendar.get(Calendar.DAY_OF_MONTH)
+        );
 
         //initialization of firebase stuff
         mStorageRef = FirebaseStorage.getInstance().getReference();
@@ -100,91 +122,79 @@ public class EntertainmentActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //the setting time/datepickerdialog
-        mEntertainmentStartDateView.setText(new SimpleDateFormat("yyyy-MM-dd",
-                Locale.getDefault()).format(new Date()));
-        mEntertainmentStartDateView.setOnClickListener(new View.OnClickListener() {
+
+        String defaultPeroid = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
+                Locale.getDefault()).format(new Date()) + " To " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
+                Locale.getDefault()).format(new Date());
+        mEntertainmentPeriodView.setText(defaultPeroid);
+        mEntertainmentPeriodView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Calendar mCalendar = Calendar.getInstance();
-                DatePickerDialog mDatePicker = new DatePickerDialog(EntertainmentActivity.this,
-                        new DatePickerDialog.OnDateSetListener(){
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                                mCalendar.set(Calendar.YEAR, year);
-                                mCalendar.set(Calendar.MONTH, month);
-                                mCalendar.set(Calendar.DATE, dayOfMonth);
-                                String result = new SimpleDateFormat("yyyy-MM-dd",
-                                        Locale.getDefault()).format(mCalendar.getTime());
-                                mEntertainmentStartDateView.setText(result);
-                            }
-                        },
-                        mCalendar.get(Calendar.YEAR),
-                        mCalendar.get(Calendar.MONTH),
-                        mCalendar.get(Calendar.DAY_OF_MONTH));
-                mDatePicker.show();
+                dateDialog.show(getFragmentManager(), "DatePickerDialog");
             }
         });
 
-        mEntertainmentStartTimeView.setText(new SimpleDateFormat("HH:mm").
-                format(Calendar.getInstance().getTime()));
-        mEntertainmentStartTimeView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TimePickerDialog mTimePicker = new TimePickerDialog(EntertainmentActivity.this ,new TimePickerDialog.OnTimeSetListener() {
-                    @SuppressLint("DefaultLocale")
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        String result = String.format("%02d:%02d", hourOfDay, minute);
-                        mEntertainmentStartTimeView.setText(result);
-                    }
-                }, 0, 0, true);
-                mTimePicker.show();
-            }
-        });
-
-
-        mEntertainmentEndDateView.setText(new SimpleDateFormat("yyyy-MM-dd",
-                Locale.getDefault()).format(new Date()));
-        mEntertainmentEndDateView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Calendar mCalendar = Calendar.getInstance();
-                DatePickerDialog mDatePicker = new DatePickerDialog(EntertainmentActivity.this,
-                        new DatePickerDialog.OnDateSetListener(){
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                                mCalendar.set(Calendar.YEAR, year);
-                                mCalendar.set(Calendar.MONTH, month);
-                                mCalendar.set(Calendar.DATE, dayOfMonth);
-                                String result = new SimpleDateFormat("yyyy-MM-dd",
-                                        Locale.getDefault()).format(mCalendar.getTime());
-                                mEntertainmentEndDateView.setText(result);
-                            }
-                        },
-                        mCalendar.get(Calendar.YEAR),
-                        mCalendar.get(Calendar.MONTH),
-                        mCalendar.get(Calendar.DAY_OF_MONTH));
-                mDatePicker.show();
-            }
-        });
-
-        mEntertainmentEndTimeView.setText(new SimpleDateFormat("HH:mm").
-                format(Calendar.getInstance().getTime()));
-        mEntertainmentEndTimeView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TimePickerDialog mTimePicker = new TimePickerDialog(EntertainmentActivity.this ,new TimePickerDialog.OnTimeSetListener() {
-                    @SuppressLint("DefaultLocale")
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        String result = String.format("%02d:%02d", hourOfDay, minute);
-                        mEntertainmentEndTimeView.setText(result);
-                    }
-                }, 0, 0, true);
-                mTimePicker.show();
-            }
-        });
-
+//
+//        mEntertainmentStartTimeView.setText(new SimpleDateFormat("HH:mm").
+//                format(Calendar.getInstance().getTime()));
+//        mEntertainmentStartTimeView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                TimePickerDialog mTimePicker = new TimePickerDialog(EntertainmentActivity.this ,new TimePickerDialog.OnTimeSetListener() {
+//                    @SuppressLint("DefaultLocale")
+//                    @Override
+//                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+//                        String result = String.format("%02d:%02d", hourOfDay, minute);
+//                        mEntertainmentStartTimeView.setText(result);
+//                    }
+//                }, 0, 0, true);
+//                mTimePicker.show();
+//            }
+//        });
+//
+//
+//        mEntertainmentEndDateView.setText(new SimpleDateFormat("yyyy-MM-dd",
+//                Locale.getDefault()).format(new Date()));
+//        mEntertainmentEndDateView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                final Calendar mCalendar = Calendar.getInstance();
+//                DatePickerDialog mDatePicker = new DatePickerDialog(EntertainmentActivity.this,
+//                        new DatePickerDialog.OnDateSetListener(){
+//                            @Override
+//                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+//                                mCalendar.set(Calendar.YEAR, year);
+//                                mCalendar.set(Calendar.MONTH, month);
+//                                mCalendar.set(Calendar.DATE, dayOfMonth);
+//                                String result = new SimpleDateFormat("yyyy-MM-dd",
+//                                        Locale.getDefault()).format(mCalendar.getTime());
+//                                mEntertainmentEndDateView.setText(result);
+//                            }
+//                        },
+//                        mCalendar.get(Calendar.YEAR),
+//                        mCalendar.get(Calendar.MONTH),
+//                        mCalendar.get(Calendar.DAY_OF_MONTH));
+//                mDatePicker.show();
+//            }
+//        });
+//
+//        mEntertainmentEndTimeView.setText(new SimpleDateFormat("HH:mm").
+//                format(Calendar.getInstance().getTime()));
+//        mEntertainmentEndTimeView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                TimePickerDialog mTimePicker = new TimePickerDialog(EntertainmentActivity.this ,new TimePickerDialog.OnTimeSetListener() {
+//                    @SuppressLint("DefaultLocale")
+//                    @Override
+//                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+//                        String result = String.format("%02d:%02d", hourOfDay, minute);
+//                        mEntertainmentEndTimeView.setText(result);
+//                    }
+//                }, 0, 0, true);
+//                mTimePicker.show();
+//            }
+//        });
+//
 
 
         //setting the spinner
@@ -212,7 +222,7 @@ public class EntertainmentActivity extends AppCompatActivity {
         Entertainment curEntertainment = new Entertainment();
         SimpleDateFormat mFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
         Calendar cal = Calendar.getInstance();
-        String startDateTime = mEntertainmentStartDateView.getText().toString() + " " + mEntertainmentStartTimeView.getText().toString();
+        String startDateTime = mBeginDate + " " + mBeginTime;
         try {
             cal.setTime(mFormat.parse(startDateTime));
         } catch (ParseException e) {
@@ -221,7 +231,7 @@ public class EntertainmentActivity extends AppCompatActivity {
 
         curEntertainment.setStarttime(cal.getTimeInMillis());
 
-        String endDateTime = mEntertainmentEndDateView.getText().toString() + " " +  mEntertainmentEndTimeView.getText().toString();
+        String endDateTime = mEndDate + " " + mEndTime;
         try {
             cal.setTime(mFormat.parse(endDateTime));
         } catch (ParseException e) {
@@ -446,5 +456,32 @@ public class EntertainmentActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+    //listen event for calendar picker
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth,int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
+        //String date = "You picked the following date: From- "+dayOfMonth+"/"+(++monthOfYear)+"/"+year+" To "+dayOfMonthEnd+"/"+(++monthOfYearEnd)+"/"+yearEnd;
+        mBeginDate = year + "-" + (++monthOfYear) + "-" + dayOfMonth;
+        mEndDate = yearEnd + "-" + (++monthOfYearEnd) + "-" + dayOfMonthEnd;
+        timeDialog.show(getFragmentManager(), "TimepickerDialog");
+    }
+
+    @Override
+    public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int hourOfDayEnd, int minuteEnd) {
+        String hourString = hourOfDay < 10 ? "0"+hourOfDay : ""+hourOfDay;
+        String minuteString = minute < 10 ? "0"+minute : ""+minute;
+        String hourStringEnd = hourOfDayEnd < 10 ? "0"+hourOfDayEnd : ""+hourOfDayEnd;
+        String minuteStringEnd = minuteEnd < 10 ? "0"+minuteEnd : ""+minuteEnd;
+        //String time = "You picked the following time: From - "+hourString+"h"+minuteString+" To - "+hourStringEnd+"h"+minuteStringEnd;
+
+        mBeginTime = hourString + ":" + minuteString;
+        mEndTime = hourStringEnd + ":" + minuteStringEnd;
+
+        String periodStr = mBeginDate + " " + mBeginTime + " To " + mEndDate + " " + mEndTime;
+
+        mEntertainmentPeriodView.setText(periodStr);
+    }
+
 
 }

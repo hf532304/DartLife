@@ -70,7 +70,6 @@ public class EditProfileActivity extends AppCompatActivity {
         mMaleButton.setEnabled(false);
         mFemaleButton.setEnabled(false);
         mMajorWidget.setText(loadProfile.getMajor());
-        mMajorWidget.setEnabled(false);
         mPasswordWidget.setText(loadProfile.getPassword());
         mDartmouthClassWidget.setText(loadProfile.getDartmouthClass());
         mPhoneWidget.setText(loadProfile.getPhone());
@@ -91,5 +90,11 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void saveProfile() {
+
+    }
+
+    //get user's id
+    private String getId() {
+        return String.valueOf(Objects.requireNonNull(mEmailWidget.getText()).toString().hashCode());
     }
 }

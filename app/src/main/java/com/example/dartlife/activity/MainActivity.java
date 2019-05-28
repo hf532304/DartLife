@@ -10,12 +10,12 @@ import android.view.View;
 
 import com.example.dartlife.R;
 import com.example.dartlife.adapter.NavigationAdapter;
+import com.stephentuso.welcome.WelcomeHelper;
 
 import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity {
-
 
     protected NavigationAdapter mAdapter;
     protected ViewPager mViewPager;
@@ -95,4 +95,5 @@ public class MainActivity extends AppCompatActivity {
         moveTaskToBack(true);
         super.onBackPressed();
     }
+
 }
