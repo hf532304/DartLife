@@ -295,8 +295,7 @@ public class SignupActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
-                                Toast.makeText(getBaseContext(), "Authentication successfully: "+
-                                                Objects.requireNonNull(task.getException()).getMessage(),
+                                Toast.makeText(getBaseContext(), "Authentication successfully: ",
                                         Toast.LENGTH_LONG).show();
                             }
                             else{

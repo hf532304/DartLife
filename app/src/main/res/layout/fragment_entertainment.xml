@@ -10,7 +10,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/sporttext"
         android:text="@string/sports"
-        android:textSize="20sp"/>
+        android:textStyle="bold"
+        android:textSize="30sp"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/SportContainer"
@@ -23,8 +24,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/dramatext"
         android:text="@string/drama"
-        android:textSize="20sp"
-        android:layout_marginTop="80dp"/>
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_marginTop="40dp"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/DramaContainer"

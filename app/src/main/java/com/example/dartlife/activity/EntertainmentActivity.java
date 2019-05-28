@@ -263,6 +263,7 @@ public class EntertainmentActivity extends AppCompatActivity implements
                         Log.d("fan", "onSuccess: " + uri.toString());
                         //next, add the node to the realtime firebase
                         DatabaseReference DBRef = mDB.getReference().child("Entertainment");
+                        progressDialog.dismiss();
                         progressDialog.setTitle("Uploading Entertainment");
                         progressDialog.show();
                         DBRef.push().setValue(curEntertainment).addOnSuccessListener(new OnSuccessListener<Void>() {

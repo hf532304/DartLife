@@ -151,7 +151,6 @@ public class FoodFragment extends Fragment implements OnMapReadyCallback {
                             .title(curFood.getTitle());
                     Marker marker = mGoogleMap.addMarker(curMarker);
                     foods.put(curMarker.getTitle(), curFood);
-                    Log.d("fan", "onBitmapLoaded: kkk");
                     markers.put(curFood, marker);
                     mTargets.remove(this);
                 }
@@ -184,7 +183,6 @@ public class FoodFragment extends Fragment implements OnMapReadyCallback {
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             if (ContextCompat.checkSelfPermission(Objects.requireNonNull(getActivity()),
                     Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                Log.d("fan", "onRequestPermissionsResult: aaa");
                 startTracking();
                 setFoodView();
             }
@@ -278,6 +276,9 @@ public class FoodFragment extends Fragment implements OnMapReadyCallback {
             //check permission
             checkPermission();
         }
+        else{
+            mNewFoodMarker = null;
+        }
     }
 
 
@@ -366,6 +367,7 @@ public class FoodFragment extends Fragment implements OnMapReadyCallback {
                     return;
                 }
                 mGoogleMap.clear();
+                mNewFoodMarker = null;
                 mZoom = zoomLevel;
                 //next, resize all the picture of markers
                 for(Food f: foods.values()){

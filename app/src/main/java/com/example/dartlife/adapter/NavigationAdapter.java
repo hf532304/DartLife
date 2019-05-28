@@ -12,7 +12,7 @@ import com.example.dartlife.fragment.MovieFragment;
 import com.example.dartlife.fragment.ProfileFragment;
 
 public class NavigationAdapter extends FragmentPagerAdapter {
-    private String[] mTabNames = {"Book", "Movie", "EntertainmentActivity", "Food", "Profile"};
+    private String[] mTabNames = {"Movie", "EntertainmentActivity", "Food", "Profile"};
     public NavigationAdapter(FragmentManager FM){
         super(FM);
     }
@@ -21,18 +21,15 @@ public class NavigationAdapter extends FragmentPagerAdapter {
     //return the corresponding fragment by the position
     public Fragment getItem(int pos){
         if(pos == 0){
-            return new BookFragment();
-        }
-        else if(pos == 1){
             return new MovieFragment();
         }
-        else if(pos == 2){
+        else if(pos == 1){
             return new EntertainmentFragment();
         }
-        else if(pos == 3){
+        else if(pos == 2){
             return new FoodFragment();
         }
-        else if(pos == 4){
+        else if(pos == 3){
             return new ProfileFragment();
         }
         return new BookFragment();

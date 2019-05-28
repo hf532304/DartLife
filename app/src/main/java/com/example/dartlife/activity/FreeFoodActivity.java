@@ -386,7 +386,7 @@ FreeFoodActivity extends AppCompatActivity {
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.signup_menu, menu);
+        inflater.inflate(R.menu.freefood_menu, menu);
         return true;
     }
 

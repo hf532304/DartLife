@@ -10,7 +10,6 @@ import android.view.View;
 
 import com.example.dartlife.R;
 import com.example.dartlife.adapter.NavigationAdapter;
-import com.stephentuso.welcome.WelcomeHelper;
 
 import java.util.Objects;
 
@@ -19,7 +18,6 @@ public class MainActivity extends AppCompatActivity {
 
     protected NavigationAdapter mAdapter;
     protected ViewPager mViewPager;
-    protected TabLayout.Tab mBookTab;
     protected TabLayout.Tab mMovieTab;
     protected TabLayout.Tab mEntertainmentTab;
     protected TabLayout.Tab mFoodTab;
@@ -50,17 +48,15 @@ public class MainActivity extends AppCompatActivity {
         mTabLayout.setupWithViewPager(mViewPager);
 
         //assign the tab to the position
-        mBookTab = mTabLayout.getTabAt(0);
-        mMovieTab = mTabLayout.getTabAt(1);
-        mEntertainmentTab = mTabLayout.getTabAt(2);
-        mFoodTab = mTabLayout.getTabAt(3);
-        mProfileTab = mTabLayout.getTabAt(4);
+        mMovieTab = mTabLayout.getTabAt(0);
+        mEntertainmentTab = mTabLayout.getTabAt(1);
+        mFoodTab = mTabLayout.getTabAt(2);
+        mProfileTab = mTabLayout.getTabAt(3);
 
         mTabLayout.setScrollPosition(0,0f,true);
         mViewPager.setCurrentItem(0);
-        mViewPager.setOffscreenPageLimit(5);
+        mViewPager.setOffscreenPageLimit(4);
 
-        mBookTab.setIcon(R.drawable.book);
         mMovieTab.setIcon(R.drawable.movie);
         mEntertainmentTab.setIcon(R.drawable.entertainment);
         mFoodTab.setIcon(R.drawable.food);
