@@ -197,6 +197,7 @@ public class MovieFragment extends Fragment implements
                         intent.putExtra(MOVIE_URL, data.getUrl());
                         intent.putExtra(MOVIE_YEAR, data.getYear());
 
+
                         startActivity(intent);
 
 

@@ -4,6 +4,8 @@ package com.example.dartlife.activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -175,8 +177,9 @@ public class MovieInfoActivity extends AppCompatActivity {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                 BitmapDrawable background = new BitmapDrawable(bitmap);
+
                 //background.setAlpha(100);
-                //background.setColorFilter(Color.rgb(123, 123, 123), PorterDuff.Mode.SCREEN);
+                background.setColorFilter(Color.rgb(123, 123, 123), PorterDuff.Mode.MULTIPLY);
 
                 mLayout.setBackground(background);
             }
