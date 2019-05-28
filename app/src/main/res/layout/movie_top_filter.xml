@@ -135,7 +135,7 @@
 
 
 
-        <SearchView
+        <!--<SearchView
             android:id="@+id/searchView"
             android:layout_width="395dp"
             android:layout_height="56dp"
@@ -145,7 +145,21 @@
             app:defaultQueryHint="Search Here"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:queryHint="Search" />
+            app:queryHint="Search" />-->
+
+    <com.mancj.materialsearchbar.MaterialSearchBar
+        android:id="@+id/searchView"
+        style="@style/MaterialSearchBarLight"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:mt_hint="Search here"
+        app:mt_maxSuggestionsCount="10"
+        mstb:layout_constraintEnd_toEndOf="parent" />
 
 
     <org.honorato.multistatetogglebutton.MultiStateToggleButton

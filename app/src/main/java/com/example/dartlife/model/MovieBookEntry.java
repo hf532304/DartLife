@@ -8,19 +8,20 @@ public class MovieBookEntry {
     private String title;
     private double score;
     private String movieOrBook;
-    private ArrayList<String> reviews;
+    private ArrayList<Reviews> reviews;
     private String type;
     private String area;
     private String description;
     private String info;
     private String year;
     private String url;
+    private String playTime;
 
     public MovieBookEntry() {
 
     }
 
-    public MovieBookEntry(String id, String title, double score, String movieOrBook, ArrayList<String> reviews, String type, String area, String description, String info, String year, String picture) {
+    public MovieBookEntry(String id, String title, double score, String movieOrBook, ArrayList<Reviews> reviews, String type, String area, String description, String info, String year, String picture, String playtime) {
         this.id = id;
         this.title = title;
         this.score = score;
@@ -32,9 +33,10 @@ public class MovieBookEntry {
         this.info = info;
         this.year = year;
         this.url = picture;
+        this.playTime = playtime;
     }
 
-    public MovieBookEntry(String id, String title, double score, String movieOrBook, ArrayList<String> reviews, String type, String area, String description, String info, String year) {
+    public MovieBookEntry(String id, String title, double score, String movieOrBook, ArrayList<Reviews> reviews, String type, String area, String description, String info, String year) {
         this.id = id;
         this.title = title;
         this.score = score;
@@ -79,11 +81,11 @@ public class MovieBookEntry {
         this.movieOrBook = movieOrBook;
     }
 
-    public ArrayList<String> getReviews() {
+    public ArrayList<Reviews> getReviews() {
         return reviews;
     }
 
-    public void setReviews(ArrayList<String> reviews) {
+    public void setReviews(ArrayList<Reviews> reviews) {
         this.reviews = reviews;
     }
 
@@ -134,5 +136,13 @@ public class MovieBookEntry {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getPlayTime() {
+        return playTime;
+    }
+
+    public void setPlayTime(String playTime) {
+        this.playTime = playTime;
     }
 }
