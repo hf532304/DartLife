@@ -92,9 +92,10 @@ public class MovieFragment extends Fragment implements
                     movies = new ArrayList<>();
 
                     if(filter_area.getTexts()[position].toString().equalsIgnoreCase("ALL AREA")) {
-                        mDatabase.child("movies").addValueEventListener(new ValueEventListener() {
+                        mDatabase.child("movies").addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
+                                //movies.clear();
                                 for(DataSnapshot datasnapshotfirst : dataSnapshot.getChildren()) {
 
                                     if(datasnapshotfirst == null) return;
@@ -119,9 +120,10 @@ public class MovieFragment extends Fragment implements
                     query.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
+
                             if (dataSnapshot.exists()) {
 
-
+                                movies.clear();
                                 for (DataSnapshot issue : dataSnapshot.getChildren()) {
                                     // do something with the individual "issues"
                                     MovieBookEntry data = issue.getValue(MovieBookEntry.class);

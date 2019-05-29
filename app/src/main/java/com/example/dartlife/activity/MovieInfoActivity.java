@@ -161,7 +161,7 @@ public class MovieInfoActivity extends AppCompatActivity {
                    all_reviews.add(review);
                }
 
-               mMovie.setReviews(all_reviews);
+               //mMovie.setReviews(all_reviews);
                 mDB.getReference().child("movies").child(mMovieId).child("reviews").setValue(all_reviews);
                 reviewButton.getText().clear();
 
