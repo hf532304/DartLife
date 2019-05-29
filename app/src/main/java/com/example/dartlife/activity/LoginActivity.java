@@ -34,8 +34,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         welcomeScreen = new WelcomeHelper(this, WelcomeActivity.class);
         welcomeScreen.show(savedInstanceState);
-        Intent welcomeIntent = new Intent(this, WelcomeActivity.class);
-        startActivity(welcomeIntent);
+        //Intent welcomeIntent = new Intent(this, WelcomeActivity.class);
+        //startActivity(welcomeIntent);
+        //welcomeScreen.forceShow();
         super.onCreate(savedInstanceState);
         this.getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
